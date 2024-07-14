@@ -6,6 +6,7 @@ from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QDateEdit
 from PyQt6.QtCore import Qt,QDate
 from PyQt6.QtWidgets import QMessageBox
+from tkinter import messagebox
 
 class MyApp(QtWidgets.QWidget):
     def __init__(self):
@@ -24,7 +25,12 @@ class MyApp(QtWidgets.QWidget):
         self.SearchButton.clicked.connect(self.search_data)
         self.register_button.clicked.connect(self.InserData)
         self.Save_Date_Bt.clicked.connect(self.edit_item)
+        self.Login_bt.clicked.connect(self.display_member_data)
         self.showDatabase()
+
+
+        self.name_label = self.findChild(QtWidgets.QLabel,'name_label')
+        self.expiry_label = self.findChild(QtWidgets.QLabel,'expiry_label')
 
     def InserData(self):
         ###############################################################
@@ -57,7 +63,9 @@ class MyApp(QtWidgets.QWidget):
         ###############################################################
         #self.contact_input.setObjectName("contact_input")65
         contact   = self.contact_input.text()
-       
+        ###############################################################
+
+        member_id  = self.id_entry.text()     
 
 
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -139,6 +147,7 @@ class MyApp(QtWidgets.QWidget):
         finally:
             conn.close()
     
+    #this was the code that i use to edit the table since 
     def edit_item(self):
         selected_index = self.tableView_2.selectionModel().currentIndex()
         if not selected_index.isValid():
@@ -168,7 +177,30 @@ class MyApp(QtWidgets.QWidget):
         finally:
             conn.close()
 
-    
+
+    def fetch_data_member(self, member_id):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'members.db')
+        conn = sqlite3.connect(file_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT Name, Expiry_date FROM members WHERE Id = ?', (member_id,))
+        member = cursor.fetchone()
+        conn.close()
+        return member
+
+    def display_member_data(self):
+        member_id = self.id_entry.text()
+        
+        member = self.fetch_data_member(member_id)
+        if member:
+            self.name_label.setText(f"Name: {member[0]}")
+            self.expiry_label.setText(f"Expiry: {member[1]}")
+        else:
+            QMessageBox.information(self, "Not Found", "Member not found.")
+
+
+
+        
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
