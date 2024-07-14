@@ -6,8 +6,9 @@ from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
 import csv
 from datetime import datetime
-
 from datetime import datetime
+
+
 class MyApp(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -18,7 +19,7 @@ class MyApp(QtWidgets.QWidget):
         self.model.setHorizontalHeaderLabels(["Id", "Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
         self.tableView.setModel(self.model)
         self.tableView_2.setModel(self.model)
-
+        
         # Load the data when the application starts
         self.showDatabase()
 
@@ -26,7 +27,17 @@ class MyApp(QtWidgets.QWidget):
         self.register_button.clicked.connect(self.InserData)
         self.Save_Date_Bt.clicked.connect(self.edit_item)
         self.Login_bt.clicked.connect(self.display_member_data)
-        self.showDatabase()
+
+        self.tableView_3_model = QStandardItemModel()
+        self.tableView_3.setModel(self.tableView_3_model)
+
+        # Load login records initially
+        self.display_login_records()
+
+
+
+
+
 
         ##### this would we should add this so our  display fucntion would work
         self.name_label = self.findChild(QtWidgets.QLabel,'name_label')
@@ -64,12 +75,7 @@ class MyApp(QtWidgets.QWidget):
         #self.contact_input.setObjectName("contact_input")65
         contact   = self.contact_input.text()
         ###############################################################
-
-        member_id  = self.id_entry.text()     
-
-
         current_directory = os.path.dirname(os.path.abspath(__file__))
-
         file_path = os.path.join(current_directory,'members.db')
         conn = sqlite3.connect(file_path)
         cursor = conn.cursor()
@@ -150,10 +156,6 @@ class MyApp(QtWidgets.QWidget):
     #this was the code that i use to edit the table since 
     def edit_item(self):
         selected_index = self.tableView_2.selectionModel().currentIndex()
-        if not selected_index.isValid():
-            QMessageBox.warning(self, "Selection Error", "Please select a row to edit.")
-            return
-        
         selected_row = selected_index.row()
         item_id = self.model.item(selected_row, 0).text()
         new_expiry = self.Expiry_edit.selectedDate().toString("yyyy-MM-dd")
@@ -231,10 +233,41 @@ class MyApp(QtWidgets.QWidget):
             print("Record saved successfully.")
         except Exception as e:
             print(f"Error saving record: {e}")
-        
+    
+
+    def display_login_records(self):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'login_records.csv')
+
+        try:
+            with open(file_path, 'r', newline='') as file:
+                reader = csv.reader(file)
+                data = list(reader)
+
+           
+
+            # Set headers
+            if data:
+                self.tableView_3_model.setHorizontalHeaderLabels(data[0])
+
+            # Populate data rows
+            for row in data[1:]:
+                items = [QStandardItem(field) for field in row]
+                self.tableView_3_model.appendRow(items)
+
+            print('Login Records Displayed Successfully')
+
+            # Ensure tableView_3 updates with the new model
+            self.tableView_3.setModel(self.tableView_3_model)
+            self.tableView_3.repaint()  # Or self.tableView_3.update()
+
+        except Exception as e:
+            print(f"Error displaying login records: {e}")
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
     window.show()
     sys.exit(app.exec())
+    
