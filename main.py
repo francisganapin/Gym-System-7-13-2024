@@ -1,17 +1,65 @@
 import sys
-from PyQt6 import QtWidgets,uic
+from datetime import datetime
 import os
 import sqlite3
+import csv
+
+
+#################################third party import
+from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton
+from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
-import csv
-from datetime import datetime
+#################################
 
+class LoginDialog(QDialog):
+    '''Display data and this was the framework of our app before they can login'''
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Login')
+        self.setGeometry(100, 100, 200, 100)
 
+        self.layout = QVBoxLayout()
 
+        self.username_label = QLabel('Username:')
+        self.username_input = QLineEdit()
+        self.password_label = QLabel('Password:')
+        self.password_input = QLineEdit()
+        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.login_button = QPushButton('Login')
 
+        self.layout.addWidget(self.username_label)
+        self.layout.addWidget(self.username_input)
+        self.layout.addWidget(self.password_label)
+        self.layout.addWidget(self.password_input)
+        self.layout.addWidget(self.login_button)
+
+        self.setLayout(self.layout)
+
+        self.login_button.clicked.connect(self.check_credentials)
+
+    def check_credentials(self):
+        '''check the credential of the user'''
+        username = self.username_input.text()
+        password = self.password_input.text()
+
+        # Modify this with your authentication logic
+        if username == "francis" and password == "francis":
+            self.accept()
+        else:
+            self.username_input.clear()
+            self.password_input.clear()
+            self.username_input.setFocus()
+
+    def clear_credentials(self):
+        '''clear the input method'''
+        self.username_input.clear()
+        self.password_input.clear()
+        self.username_input.setFocus()
 
 class MyApp(QtWidgets.QWidget):
+    ''' display oru data so that it would work
+    '''
     def __init__(self):
         super().__init__()
         uic.loadUi('gym.ui', self)
@@ -22,15 +70,15 @@ class MyApp(QtWidgets.QWidget):
         # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
         self.model = QStandardItemModel()
-        self.model.setHorizontalHeaderLabels(["Id", "Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.model.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
         self.tableView.setModel(self.model)
         self.tableView_2.setModel(self.model)
         
         # Load the data when the application starts
-        self.showDatabase()
+        self.show_database()
 
         self.SearchButton.clicked.connect(self.search_data)
-        self.register_button.clicked.connect(self.InserData)
+        self.register_button.clicked.connect(self.insert_data)
         self.Save_Date_Bt.clicked.connect(self.edit_item)
         self.Login_bt.clicked.connect(self.display_member_data)
 
@@ -41,18 +89,16 @@ class MyApp(QtWidgets.QWidget):
         self.display_login_records()
 
 
-
-
-
-
         ##### this would we should add this so our  display fucntion would work
-        self.name_label = self.findChild(QtWidgets.QLabel,'name_label')
-        self.expiry_label = self.findChild(QtWidgets.QLabel,'expiry_label')
+       
 
-    def InserData(self):
+    def insert_data(self):
+        '''
+        this one is use for register data of the member
+        '''
         ###############################################################
         #self.id_input.setObjectName("id_input") line 55
-        id    = self.id_input.text()
+        id_value    = self.id_input.text()
         ###############################################################
         #self.name_input.setObjectName("name_input") line 46
         name =  self.name_input.text()
@@ -87,20 +133,22 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute('''INSERT INTO members(Id,Name,Email,Expiry_date,Contact,Gender,Birthday,Address)
-                        VALUES(?,?,?,?,?,?,?,?)''', (id, name, email, expiry_date, contact, gender, birthday, address))
+            cursor.execute('''INSERT INTO members
+                        (Id,Name,Email,Expiry_date,Contact,Gender,Birthday,Address)
+                        VALUES(?,?,?,?,?,?,?,?)''', 
+                        (id_value,name,email,expiry_date, contact,gender,birthday,address))
+            
             conn.commit()
             print('Data Inserted Successfully')
-        except sqlite3.IntegrityError as e:
+        except sqlite3.IntegrityError:
            QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id} already exists.")
         finally:
             conn.close()
 
 
         print(f"{id},{name},{email},{expiry_date},{birthday},{gender},{member},{address}")
-        
-    #this will fetch the data on the 
-    def showDatabase(self):
+  
+    def show_database(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
@@ -123,10 +171,15 @@ class MyApp(QtWidgets.QWidget):
             conn.close()
     
 
+
+
     def search_data(self):
+        """
+        Search the data in the second tab. 
+        You can choose to search by name or ID.
+        """
         search_name = self.name_search_input.text()
         search_id = self.id_search_input.text()
-
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
@@ -158,28 +211,30 @@ class MyApp(QtWidgets.QWidget):
             print(f'Sqlite error: {e}')
         finally:
             conn.close()
+
     
-    #this was the code that i use to edit the table since 
+  
     def edit_item(self):
+        '''this one is edit for data on selected member 
+            in order to update the data it should specify the 
+            target member
+        '''
+        
         selected_index = self.tableView_2.selectionModel().currentIndex()
         selected_row = selected_index.row()
-        
         # Check if a valid row is selected
         if selected_row < 0:
             QMessageBox.warning(self, "Selection Error", "No row is selected.")
             return
-        
         item_id = self.model.item(selected_row, 0).text()
-
         # Check if item_id is valid (not empty)
         if not item_id:
             QMessageBox.warning(self, "Selection Error", "No item is selected.")
             return
-
         new_expiry = self.Expiry_edit.selectedDate().toString("yyyy-MM-dd")
-        
-        self.model.setItem(selected_row, 3, QStandardItem(new_expiry))  # Assuming column 3 is Expiry
-
+        # Update the model in the table view
+        self.model.setItem(selected_row,3,QStandardItem(new_expiry))  # Assuming column 3 is Expiry
+        # Update the database
         current_directory = os.path.dirname(os.path.abspath(__file__))
         db_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(db_path)
@@ -192,13 +247,26 @@ class MyApp(QtWidgets.QWidget):
                 WHERE Id = ?
             ''', (new_expiry, item_id))
             conn.commit()
+            print('Data Updated Successfully')
         except sqlite3.Error as e:
             QMessageBox.critical(self, "Database Error", f"An error occurred: {e}")
         finally:
             conn.close()
+        #main.py:215:0: C0301: Line too long (101/100) (line-too-long)
+
+
+
+
+
+
+
 
 
     def fetch_data_member(self, member_id):
+        """
+        this one is for function for display_member_data()
+        since this one it will use for fetching member in login
+        """
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
@@ -209,6 +277,8 @@ class MyApp(QtWidgets.QWidget):
         return member
 
     def display_member_data(self):
+        """display them if they are in login so that the 
+        employee will know  if they are expired """
         member_id = self.id_entry.text()
         
         member = self.fetch_data_member(member_id)
@@ -218,23 +288,10 @@ class MyApp(QtWidgets.QWidget):
         else:
             QMessageBox.information(self, "Not Found", "Member not found.")
 
-
-    def display_member_data(self):
-        member_id = self.id_entry.text()
-        
-        member = self.fetch_data_member(member_id)
-        if member:
-            member_name = member[0]
-            expiry_date = member[1]
-            
-            self.name_label.setText(f"Name: {member_name}")
-            self.expiry_label.setText(f"Expiry: {expiry_date}")
-            
-            self.save_login_record(member_name)
-        else:
-            QMessageBox.information(self, "Not Found", "Member not found.")
-
     def save_login_record(self, member_name):
+        """
+        this code if the person was login it would save at login_records.csv
+        """
         try:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             record = [member_name, current_time]
@@ -243,26 +300,34 @@ class MyApp(QtWidgets.QWidget):
             file_path = os.path.join(current_directory, 'login_records.csv')
 
             file_exists = os.path.isfile(file_path)
-            with open(file_path, 'a', newline='') as file:
+            with open(file_path, 'a', newline='',encoding='utf-8') as file:
                 writer = csv.writer(file)
                 if not file_exists:
                     writer.writerow(["Name", "Login Time"])
                 writer.writerow(record)
             print("Record saved successfully.")
+        except FileNotFoundError :
+            print(f"Error: File '{file_path}' not found.")
+        except IOError as e:
+            print(f"Error writing to file '{file_path}': {e}")
         except Exception as e:
-            print(f"Error saving record: {e}")
+            print(f"Unexpected error saving record: {e}")
     
-
     def display_login_records(self):
+        """
+        Display login records from login_records.csv in a PyQt TableView.
+        """
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'login_records.csv')
 
         try:
-            with open(file_path, 'r', newline='') as file:
+            with open(file_path, 'r', newline='', encoding='utf-8') as file:
                 reader = csv.reader(file)
                 data = list(reader)
 
-           
+            # Initialize a new model if it doesn't exist
+            if not hasattr(self, 'tableView_3_model'):
+                self.tableView_3_model = QStandardItemModel()
 
             # Set headers
             if data:
@@ -279,13 +344,30 @@ class MyApp(QtWidgets.QWidget):
             self.tableView_3.setModel(self.tableView_3_model)
             self.tableView_3.repaint()  # Or self.tableView_3.update()
 
+        except FileNotFoundError:
+            print(f"Error: File '{file_path}' not found.")
+        except IOError as e:
+            print(f"Error reading file '{file_path}': {e}")
+        except csv.Error as e:
+            print(f"CSV error while reading file '{file_path}': {e}")
         except Exception as e:
-            print(f"Error displaying login records: {e}")
+            print(f"Unexpected error displaying login records: {e}")
+
+    def show_frame(self):
+        """
+            this one if you finish the login and authenticate it will show the frame
+        """
+
+        self.Frame.show()
 
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = MyApp()
-    window.show()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    login_dialog = LoginDialog()
+    if login_dialog.exec() == QDialog.DialogCode.Accepted:
+        main_app = MyApp()
+        main_app.show()
+        main_app.show_frame()  # Show the frame only after successful authentication
+
     sys.exit(app.exec())
-    
