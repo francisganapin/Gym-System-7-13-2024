@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1184</width>
+    <width>1205</width>
     <height>716</height>
    </rect>
   </property>
@@ -22,6 +22,9 @@
      <height>721</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:#CAEFD1</string>
+   </property>
    <property name="tabPosition">
     <enum>QTabWidget::North</enum>
    </property>
@@ -29,7 +32,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>2</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -56,6 +59,9 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -69,6 +75,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
+     </property>
      <property name="text">
       <string>Email</string>
      </property>
@@ -81,6 +90,9 @@
        <width>201</width>
        <height>22</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
      </property>
      <item>
       <property name="text">
@@ -102,6 +114,9 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
      <item>
       <property name="text">
        <string>Member</string>
@@ -122,6 +137,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
+     </property>
      <property name="text">
       <string>Id</string>
      </property>
@@ -131,9 +149,12 @@
       <rect>
        <x>260</x>
        <y>160</y>
-       <width>81</width>
-       <height>16</height>
+       <width>121</width>
+       <height>21</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Membership</string>
@@ -148,15 +169,22 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
        <x>260</x>
        <y>40</y>
-       <width>49</width>
+       <width>121</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;
+</string>
      </property>
      <property name="text">
       <string>Contact</string>
@@ -167,9 +195,12 @@
       <rect>
        <x>260</x>
        <y>240</y>
-       <width>49</width>
+       <width>181</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Birthday</string>
@@ -184,15 +215,21 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
        <x>260</x>
        <y>100</y>
-       <width>49</width>
+       <width>101</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Gender</string>
@@ -207,6 +244,9 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
     </widget>
     <widget class="QCalendarWidget" name="birthday_widget">
      <property name="geometry">
@@ -216,6 +256,9 @@
        <width>201</width>
        <height>190</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#555555</string>
      </property>
     </widget>
     <widget class="QCalendarWidget" name="expiry_input">
@@ -227,15 +270,21 @@
        <height>190</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#555555</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
        <x>20</x>
        <y>240</y>
-       <width>49</width>
+       <width>61</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Expiry</string>
@@ -250,6 +299,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
+     </property>
      <property name="text">
       <string>Name</string>
      </property>
@@ -259,9 +311,12 @@
       <rect>
        <x>20</x>
        <y>480</y>
-       <width>49</width>
+       <width>121</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Address</string>
@@ -276,6 +331,10 @@
        <height>40</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd
+</string>
+     </property>
      <property name="text">
       <string>Register</string>
      </property>
@@ -289,6 +348,9 @@
        <height>621</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#555555</string>
+     </property>
     </widget>
     <widget class="QTextEdit" name="address_input">
      <property name="geometry">
@@ -298,6 +360,9 @@
        <width>441</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_11">
@@ -327,6 +392,9 @@
        <height>641</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#555555</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_10">
      <property name="geometry">
@@ -336,6 +404,9 @@
        <width>49</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Name</string>
@@ -350,6 +421,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
+     </property>
      <property name="text">
       <string>Search Member</string>
      </property>
@@ -363,6 +437,9 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
@@ -372,6 +449,9 @@
        <width>49</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>ID</string>
@@ -386,6 +466,9 @@
        <height>22</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="SearchButton">
      <property name="geometry">
@@ -396,6 +479,9 @@
        <height>41</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
      <property name="text">
       <string>Search</string>
      </property>
@@ -405,9 +491,12 @@
       <rect>
        <x>680</x>
        <y>220</y>
-       <width>161</width>
-       <height>16</height>
+       <width>241</width>
+       <height>21</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string>Update The Selected Expiry</string>
@@ -422,6 +511,9 @@
        <height>190</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#555555</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="Save_Date_Bt">
      <property name="geometry">
@@ -431,6 +523,9 @@
        <width>481</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
      </property>
      <property name="text">
       <string>Save</string>
@@ -446,12 +541,12 @@
       <rect>
        <x>480</x>
        <y>80</y>
-       <width>221</width>
+       <width>401</width>
        <height>40</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font:14pt &quot;Segoe UI&quot;;</string>
+      <string notr="true">font: 900 italic 18pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string/>
@@ -462,12 +557,12 @@
       <rect>
        <x>480</x>
        <y>120</y>
-       <width>221</width>
+       <width>261</width>
        <height>40</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 14pt &quot;Segoe UI&quot;;</string>
+      <string notr="true">font: 900 italic 18pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string/>
@@ -482,15 +577,21 @@
        <height>40</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="Login_bt">
      <property name="geometry">
       <rect>
-       <x>474</x>
+       <x>480</x>
        <y>260</y>
        <width>261</width>
        <height>40</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#eeeedd</string>
      </property>
      <property name="text">
       <string>Login</string>
@@ -506,9 +607,12 @@
       <rect>
        <x>20</x>
        <y>0</y>
-       <width>781</width>
+       <width>201</width>
        <height>661</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#555555;</string>
      </property>
     </widget>
    </widget>

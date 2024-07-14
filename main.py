@@ -6,7 +6,9 @@ from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
 import csv
 from datetime import datetime
-from datetime import datetime
+
+
+
 
 
 class MyApp(QtWidgets.QWidget):
@@ -14,6 +16,10 @@ class MyApp(QtWidgets.QWidget):
         super().__init__()
         uic.loadUi('gym.ui', self)
        
+        # Set fixed size to prevent resizing
+        self.setFixedSize(self.size())
+
+        # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Id", "Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
@@ -86,7 +92,7 @@ class MyApp(QtWidgets.QWidget):
             conn.commit()
             print('Data Inserted Successfully')
         except sqlite3.IntegrityError as e:
-            print(f'Sqlite error: {e}')
+           QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id} already exists.")
         finally:
             conn.close()
 
@@ -157,7 +163,19 @@ class MyApp(QtWidgets.QWidget):
     def edit_item(self):
         selected_index = self.tableView_2.selectionModel().currentIndex()
         selected_row = selected_index.row()
+        
+        # Check if a valid row is selected
+        if selected_row < 0:
+            QMessageBox.warning(self, "Selection Error", "No row is selected.")
+            return
+        
         item_id = self.model.item(selected_row, 0).text()
+
+        # Check if item_id is valid (not empty)
+        if not item_id:
+            QMessageBox.warning(self, "Selection Error", "No item is selected.")
+            return
+
         new_expiry = self.Expiry_edit.selectedDate().toString("yyyy-MM-dd")
         
         self.model.setItem(selected_row, 3, QStandardItem(new_expiry))  # Assuming column 3 is Expiry
