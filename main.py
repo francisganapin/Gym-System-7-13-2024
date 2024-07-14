@@ -3,11 +3,11 @@ from PyQt6 import QtWidgets,uic
 import os
 import sqlite3
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
-from PyQt6.QtWidgets import QDateEdit
-from PyQt6.QtCore import Qt,QDate
 from PyQt6.QtWidgets import QMessageBox
-from tkinter import messagebox
+import csv
+from datetime import datetime
 
+from datetime import datetime
 class MyApp(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -199,7 +199,38 @@ class MyApp(QtWidgets.QWidget):
             QMessageBox.information(self, "Not Found", "Member not found.")
 
 
+    def display_member_data(self):
+        member_id = self.id_entry.text()
+        
+        member = self.fetch_data_member(member_id)
+        if member:
+            member_name = member[0]
+            expiry_date = member[1]
+            
+            self.name_label.setText(f"Name: {member_name}")
+            self.expiry_label.setText(f"Expiry: {expiry_date}")
+            
+            self.save_login_record(member_name)
+        else:
+            QMessageBox.information(self, "Not Found", "Member not found.")
 
+    def save_login_record(self, member_name):
+        try:
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            record = [member_name, current_time]
+
+            current_directory = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(current_directory, 'login_records.csv')
+
+            file_exists = os.path.isfile(file_path)
+            with open(file_path, 'a', newline='') as file:
+                writer = csv.writer(file)
+                if not file_exists:
+                    writer.writerow(["Name", "Login Time"])
+                writer.writerow(record)
+            print("Record saved successfully.")
+        except Exception as e:
+            print(f"Error saving record: {e}")
         
 
 if __name__ == '__main__':
