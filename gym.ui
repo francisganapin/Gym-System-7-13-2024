@@ -29,7 +29,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -451,7 +451,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 28pt &quot;Segoe UI&quot;;</string>
+      <string notr="true">font:14pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string/>
@@ -467,7 +467,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 28pt &quot;Segoe UI&quot;;</string>
+      <string notr="true">font: 14pt &quot;Segoe UI&quot;;</string>
      </property>
      <property name="text">
       <string/>

@@ -28,7 +28,7 @@ class MyApp(QtWidgets.QWidget):
         self.Login_bt.clicked.connect(self.display_member_data)
         self.showDatabase()
 
-
+        ##### this would we should add this so our  display fucntion would work
         self.name_label = self.findChild(QtWidgets.QLabel,'name_label')
         self.expiry_label = self.findChild(QtWidgets.QLabel,'expiry_label')
 
