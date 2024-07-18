@@ -6,7 +6,7 @@ import csv
 
 
 #################################third party import
-from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
 from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
@@ -16,26 +16,13 @@ class LoginDialog(QDialog):
     '''Display data and this was the framework of our app before they can login'''
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Login')
-        self.setGeometry(100, 100, 200, 100)
+        uic.loadUi('login.ui', self)
 
-        self.layout = QVBoxLayout()
-
-        self.username_label = QLabel('Username:')
-        self.username_input = QLineEdit()
-        self.password_label = QLabel('Password:')
-        self.password_input = QLineEdit()
+        # Set fixed size to prevent resizing
+        self.setFixedSize(self.size())
+        self.username_input.text()
+        self.password_input.text()
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self.login_button = QPushButton('Login')
-
-        self.layout.addWidget(self.username_label)
-        self.layout.addWidget(self.username_input)
-        self.layout.addWidget(self.password_label)
-        self.layout.addWidget(self.password_input)
-        self.layout.addWidget(self.login_button)
-
-        self.setLayout(self.layout)
-
         self.login_button.clicked.connect(self.check_credentials)
 
     def check_credentials(self):
