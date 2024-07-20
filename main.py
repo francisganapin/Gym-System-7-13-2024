@@ -26,17 +26,27 @@ class LoginDialog(QDialog):
         self.login_button.clicked.connect(self.check_credentials)
 
     def check_credentials(self):
-        '''check the credential of the user'''
+        '''Check the credentials of the user'''
         username = self.username_input.text()
         password = self.password_input.text()
 
-        # Modify this with your authentication logic
-        if username == "francis" and password == "francis":
-            self.accept()
-        else:
-            self.username_input.clear()
-            self.password_input.clear()
-            self.username_input.setFocus()
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'database.db')
+    
+        with sqlite3.connect(file_path) as conn:
+            self.cursor = conn.cursor()
+
+            query = 'SELECT * FROM users WHERE username = ? AND password = ?'
+
+            self.cursor.execute(query, (username, password))
+            result = self.cursor.fetchone()
+
+            if result:
+                self.accept()
+            else:
+                self.username_input.clear()
+                self.password_input.clear()
+                self.username_input.setFocus()
 
     def clear_credentials(self):
         '''clear the input method'''
@@ -267,11 +277,20 @@ class MyApp(QtWidgets.QWidget):
         """display them if they are in login so that the 
         employee will know  if they are expired """
         member_id = self.id_entry.text()
-        
+    
         member = self.fetch_data_member(member_id)
         if member:
             self.name_label.setText(f"Name: {member[0]}")
-            self.expiry_label.setText(f"Expiry: {member[1]}")
+        
+            expiry_date_str = member[1]
+            expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d").date()
+            current_date = datetime.now().date()
+            if expiry_date < current_date:
+                self.expiry_label.setStyleSheet("color: red; font: 900 italic 18pt")
+            else:
+                self.expiry_label.setStyleSheet("color: green; font: 900 italic 18pt")  # Reset to default color
+        
+            self.expiry_label.setText(f"Expiry: {expiry_date_str}")
         else:
             QMessageBox.information(self, "Not Found", "Member not found.")
 
