@@ -10,7 +10,9 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
 from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
-from PyQt6.QtWidgets import QMessageBox,QMenu
+from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget
 #################################
 
 class LoginDialog(QDialog):
@@ -59,6 +61,24 @@ class LoginDialog(QDialog):
         self.password_input.clear()
         self.username_input.setFocus()
 
+class CustomConfirmDialog(QDialog):
+    def __init__(self, member_id, member_name, parent=None):
+        super().__init__(parent)
+        uic.loadUi('delete.ui', self)
+
+        # Set fixed size to prevent resizing
+        self.setFixedSize(self.size())
+        # Update the label to include ID and name
+
+        self.label_for_delete.setText(f'Are you sure you want to delete the member with ID: {member_id} and Name: {member_name}?')
+        # Connect buttons to dialog slots
+        self.yes_button_2.clicked.connect(self.accept)
+        self.no_button.clicked.connect(self.reject)
+
+    def exec_dialog(self):
+        return self.exec()
+
+
 class MyApp(QtWidgets.QWidget):
     ''' display oru data so that it would work
     '''
@@ -71,10 +91,6 @@ class MyApp(QtWidgets.QWidget):
 
         # Store the username
         self.username = username
-
-
-
-
 
         # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
@@ -101,7 +117,8 @@ class MyApp(QtWidgets.QWidget):
         self.Login_bt.clicked.connect(self.display_member_data)
         self.login_button_2.clicked.connect(self.check_credentials_manager)
         self.search_bt_manager.clicked.connect(self.search_data_manger)
-
+        self.delete_bt_manager_2.clicked.connect(self.delete_selected_row)
+        self.back_bt_manager.clicked.connect(self.back_manager_page)
         
         self.tableView_3_model = QStandardItemModel()
         self.tableView_3.setModel(self.tableView_3_model)
@@ -130,11 +147,12 @@ class MyApp(QtWidgets.QWidget):
         ##### this would we should add this so our  display fucntion would work
        
 
-        # Initialize stacked widget
-        self.stacked_layout = QtWidgets.QStackedLayout()
-        self.page = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget')
-        self.page_2 = self.findChild(QtWidgets.QWidget, 'page_2')
-
+       # Access the stacked widget and the pages
+        self.stackedWidget = self.findChild(QStackedWidget, 'stackedWidget')
+        self.page_1 = self.findChild(QWidget, 'page_1')
+        self.page_2 = self.findChild(QWidget, 'page_2')
+        self.password_input_2.setEchoMode(QLineEdit.EchoMode.Password)
+    
 
     def insert_data(self):
         '''
@@ -185,13 +203,10 @@ class MyApp(QtWidgets.QWidget):
             conn.commit()
             print('Data Inserted Successfully')
         except sqlite3.IntegrityError:
-           QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id} already exists.")
+           QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id_value} is already exists.")
         finally:
             conn.close()
 
-
-        print(f"{id},{name},{email},{expiry_date},{birthday},{gender},{member},{address}")
-  
     def show_database_register(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
@@ -476,6 +491,7 @@ class MyApp(QtWidgets.QWidget):
         '''Check the credentials of the user'''
         self.manger = self.username_input_2.text()
         password = self.password_input_2.text()
+        self.password_input_2.setEchoMode(QLineEdit.EchoMode.Password)
 
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'database.db')
@@ -491,8 +507,8 @@ class MyApp(QtWidgets.QWidget):
             if result:
                 self.stackedWidget.setCurrentWidget(self.page_2)
             else:
-                self.username_input.text()
-                self.password_input.text()
+                self.username_input_2.text()
+                self.password_input_2.text()
                 # Pop up invalid credentials
                 self.invalid_label_2_manger.setText('Invalid Credentials')
                 QTimer.singleShot(3000, lambda: self.invalid_label_2_manger.setText(''))
@@ -502,7 +518,6 @@ class MyApp(QtWidgets.QWidget):
         self.username_input_2.clear()
         self.username_input_2.clear()
         self.username_input_2.setFocus()
-
 
     def search_data_manger(self):
         """
@@ -543,8 +558,45 @@ class MyApp(QtWidgets.QWidget):
         finally:
             conn.close()
 
- 
-   
+    def delete_selected_row(self):
+        # Get the selected row index
+        selected_indexes = self.tableView_4.selectedIndexes()  # Assuming view_4 is your QTableView or similar
+        if not selected_indexes:
+            print("No row selected")
+            return
+        
+        # Assuming the first column contains the ID and the second column contains the name
+        selected_row = selected_indexes[0].row()
+        member_id = self.model_4.item(selected_row, 0).text()
+        member_name = self.model_4.item(selected_row, 1).text()
+        
+        # Show custom confirmation dialog with ID and name
+        dialog = CustomConfirmDialog(member_id, member_name, self)
+        reply = dialog.exec_dialog()
+        
+        if reply == QDialog.DialogCode.Accepted:
+            current_directory = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(current_directory, 'members.db')
+            conn = sqlite3.connect(file_path)
+            cursor = conn.cursor()
+
+            try:
+                # Delete the member from the database
+                cursor.execute("DELETE FROM members WHERE Id = ?", (member_id,))
+                conn.commit()
+                
+                # Remove the row from the model
+                self.model_4.removeRow(selected_row)
+                print('Row Deleted Successfully')
+            except sqlite3.Error as e:
+                print(f'Sqlite error: {e}')
+            finally:
+                conn.close()
+        else:
+            print("Deletion cancelled")
+
+    def back_manager_page(self):
+        self.stackedWidget.setCurrentWidget(self.page_1)
 
 
 if __name__ == "__main__":

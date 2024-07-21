@@ -454,8 +454,8 @@
      <widget class="QLineEdit" name="name_search_input">
       <property name="geometry">
        <rect>
-        <x>680</x>
-        <y>80</y>
+        <x>880</x>
+        <y>90</y>
         <width>161</width>
         <height>22</height>
        </rect>
@@ -483,8 +483,8 @@
      <widget class="QLineEdit" name="id_search_input">
       <property name="geometry">
        <rect>
-        <x>890</x>
-        <y>80</y>
+        <x>680</x>
+        <y>90</y>
         <width>161</width>
         <height>22</height>
        </rect>
@@ -686,9 +686,9 @@
        <string notr="true">background-color:#eeeedd</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="page_1">
        <widget class="QLineEdit" name="password_input_2">
         <property name="geometry">
          <rect>
@@ -773,14 +773,21 @@
          <string>Manager Authentication</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="invalid_label_2_manger">
+       <widget class="QLabel" name="invalid_label_2_manger">
         <property name="geometry">
          <rect>
-          <x>82</x>
-          <y>440</y>
-          <width>191</width>
-          <height>22</height>
+          <x>70</x>
+          <y>460</y>
+          <width>231</width>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:rgb(255, 0, 0);
+font: 20pt &quot;Segoe UI&quot;;</string>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </widget>
@@ -832,7 +839,7 @@
          <rect>
           <x>20</x>
           <y>290</y>
-          <width>151</width>
+          <width>131</width>
           <height>22</height>
          </rect>
         </property>
@@ -870,6 +877,38 @@
         </property>
         <property name="text">
          <string>Name</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="delete_bt_manager_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>380</y>
+          <width>331</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:#eeeedd</string>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="back_bt_manager">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>430</y>
+          <width>331</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:#eeeedd</string>
+        </property>
+        <property name="text">
+         <string>Back to Login Manger</string>
         </property>
        </widget>
       </widget>
