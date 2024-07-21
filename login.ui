@@ -84,6 +84,23 @@
     <string>Password</string>
    </property>
   </widget>
+  <widget class="QLabel" name="invalid_label">
+   <property name="geometry">
+    <rect>
+     <x>18</x>
+     <y>69</y>
+     <width>241</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:red;
+font: 22pt &quot;Segoe UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

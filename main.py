@@ -3,13 +3,14 @@ from datetime import datetime
 import os
 import sqlite3
 import csv
-
+from PyQt6.QtCore import QTimer,Qt
+from PyQt6 import QtCore
 
 #################################third party import
 from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
 from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
-from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QMessageBox,QMenu
 #################################
 
 class LoginDialog(QDialog):
@@ -25,9 +26,11 @@ class LoginDialog(QDialog):
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.login_button.clicked.connect(self.check_credentials)
 
+
+
     def check_credentials(self):
         '''Check the credentials of the user'''
-        username = self.username_input.text()
+        self.username = self.username_input.text()
         password = self.password_input.text()
 
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -38,15 +41,17 @@ class LoginDialog(QDialog):
 
             query = 'SELECT * FROM users WHERE username = ? AND password = ?'
 
-            self.cursor.execute(query, (username, password))
+            self.cursor.execute(query, (self.username, password))
             result = self.cursor.fetchone()
 
             if result:
                 self.accept()
             else:
-                self.username_input.clear()
-                self.password_input.clear()
-                self.username_input.setFocus()
+                self.username_input.text()
+                self.password_input.text()
+                # Pop up invalid credentials
+                self.invalid_label.setText('Invalid Credentials')
+                QTimer.singleShot(3000, lambda: self.invalid_label.setText(''))
 
     def clear_credentials(self):
         '''clear the input method'''
@@ -57,37 +62,79 @@ class LoginDialog(QDialog):
 class MyApp(QtWidgets.QWidget):
     ''' display oru data so that it would work
     '''
-    def __init__(self):
+    def __init__(self,username=None):
         super().__init__()
         uic.loadUi('gym.ui', self)
        
         # Set fixed size to prevent resizing
         self.setFixedSize(self.size())
 
+        # Store the username
+        self.username = username
+
+
+
+
+
         # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
-        self.model = QStandardItemModel()
-        self.model.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
-        self.tableView.setModel(self.model)
-        self.tableView_2.setModel(self.model)
+        self.model_1 = QStandardItemModel()
+        self.model_1.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.tableView.setModel(self.model_1)
+
+        self.model_2 = QStandardItemModel()
+        self.model_2.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.tableView_2.setModel(self.model_2)
         
+        self.model_4 = QStandardItemModel()
+        self.model_4.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.tableView_4.setModel(self.model_4)
+
         # Load the data when the application starts
-        self.show_database()
+        self.show_database_register()
+        self.show_database_edit()
+        self.show_database_manger()
 
         self.SearchButton.clicked.connect(self.search_data)
         self.register_button.clicked.connect(self.insert_data)
         self.Save_Date_Bt.clicked.connect(self.edit_item)
         self.Login_bt.clicked.connect(self.display_member_data)
+        self.login_button_2.clicked.connect(self.check_credentials_manager)
+        self.search_bt_manager.clicked.connect(self.search_data_manger)
 
+        
         self.tableView_3_model = QStandardItemModel()
         self.tableView_3.setModel(self.tableView_3_model)
 
+
+        ###############################################################
+       
+        ###############################################################
+
         # Load login records initially
+        # Set up the timer to update the time every second
+        
+        ########################## display all login record in page  Login Data Page
         self.display_login_records()
+
+        # show date  and time 
+
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.update_time)
+        self.timer.start(1000) ## update every seconds
+
+        ################## Show the current login user 
+        self.label_username()
 
 
         ##### this would we should add this so our  display fucntion would work
        
+
+        # Initialize stacked widget
+        self.stacked_layout = QtWidgets.QStackedLayout()
+        self.page = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget')
+        self.page_2 = self.findChild(QtWidgets.QWidget, 'page_2')
+
 
     def insert_data(self):
         '''
@@ -145,7 +192,7 @@ class MyApp(QtWidgets.QWidget):
 
         print(f"{id},{name},{email},{expiry_date},{birthday},{gender},{member},{address}")
   
-    def show_database(self):
+    def show_database_register(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
@@ -155,20 +202,61 @@ class MyApp(QtWidgets.QWidget):
             cursor.execute("SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
             rows = cursor.fetchall()
 
-            self.model.removeRows(0, self.model.rowCount())  # Clear the model
+            self.model_1.removeRows(0, self.model_1.rowCount())  # Clear the model
 
             for row_data in rows:
                 items = [QStandardItem(str(data)) for data in row_data]
-                self.model.appendRow(items)
+                self.model_1.appendRow(items)
 
             print('Data Fetched Successfully')
         except sqlite3.Error as e:
             print(f'Sqlite error: {e}')
         finally:
             conn.close()
-    
 
+    def show_database_edit(self):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'members.db')
+        conn = sqlite3.connect(file_path)
+        cursor = conn.cursor()
 
+        try:
+            cursor.execute("SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            rows = cursor.fetchall()
+
+            self.model_2.removeRows(0, self.model_2.rowCount())  # Clear the model
+
+            for row_data in rows:
+                items = [QStandardItem(str(data)) for data in row_data]
+                self.model_2.appendRow(items)
+
+            print('Data Fetched Successfully')
+        except sqlite3.Error as e:
+            print(f'Sqlite error: {e}')
+        finally:
+            conn.close()
+
+    def show_database_manger(self):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'members.db')
+        conn = sqlite3.connect(file_path)
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            rows = cursor.fetchall()
+
+            self.model_4.removeRows(0, self.model_4.rowCount())  # Clear the model
+
+            for row_data in rows:
+                items = [QStandardItem(str(data)) for data in row_data]
+                self.model_4.appendRow(items)
+
+            print('Data Fetched Successfully')
+        except sqlite3.Error as e:
+            print(f'Sqlite error: {e}')
+        finally:
+            conn.close()
 
     def search_data(self):
         """
@@ -197,11 +285,11 @@ class MyApp(QtWidgets.QWidget):
             cursor.execute(query, params)
             rows = cursor.fetchall()
 
-            self.model.removeRows(0, self.model.rowCount())  # Clear the model
+            self.model_2.removeRows(0, self.model_2.rowCount())  # Clear the model
 
             for row_data in rows:
                 items = [QStandardItem(str(data)) for data in row_data]
-                self.model.appendRow(items)
+                self.model_2.appendRow(items)
 
             print('Search Results Fetched Successfully')
         except sqlite3.Error as e:
@@ -209,12 +297,12 @@ class MyApp(QtWidgets.QWidget):
         finally:
             conn.close()
 
-    
-  
     def edit_item(self):
         '''this one is edit for data on selected member 
             in order to update the data it should specify the 
             target member
+
+            this one is connected to model_2
         '''
         
         selected_index = self.tableView_2.selectionModel().currentIndex()
@@ -251,14 +339,6 @@ class MyApp(QtWidgets.QWidget):
             conn.close()
         #main.py:215:0: C0301: Line too long (101/100) (line-too-long)
 
-
-
-
-
-
-
-
-
     def fetch_data_member(self, member_id):
         """
         this one is for function for display_member_data()
@@ -285,12 +365,17 @@ class MyApp(QtWidgets.QWidget):
             expiry_date_str = member[1]
             expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d").date()
             current_date = datetime.now().date()
+            self.expiry_label.setText(f"Expiry: {expiry_date_str}")
             if expiry_date < current_date:
+
                 self.expiry_label.setStyleSheet("color: red; font: 900 italic 18pt")
             else:
                 self.expiry_label.setStyleSheet("color: green; font: 900 italic 18pt")  # Reset to default color
-        
-            self.expiry_label.setText(f"Expiry: {expiry_date_str}")
+          
+            
+            self.save_login_record(member[0])
+            QTimer.singleShot(3000, lambda: self.name_label.setText(""))
+            QTimer.singleShot(3000, lambda: self.expiry_label.setText(""))
         else:
             QMessageBox.information(self, "Not Found", "Member not found.")
 
@@ -300,7 +385,7 @@ class MyApp(QtWidgets.QWidget):
         """
         try:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            record = [member_name, current_time]
+            record = [member_name, current_time,self.username]
 
             current_directory = os.path.dirname(os.path.abspath(__file__))
             file_path = os.path.join(current_directory, 'login_records.csv')
@@ -309,7 +394,7 @@ class MyApp(QtWidgets.QWidget):
             with open(file_path, 'a', newline='',encoding='utf-8') as file:
                 writer = csv.writer(file)
                 if not file_exists:
-                    writer.writerow(["Name", "Login Time"])
+                    writer.writerow(["Name", "Login Time",'Employee'])
                 writer.writerow(record)
             print("Record saved successfully.")
         except FileNotFoundError :
@@ -363,8 +448,103 @@ class MyApp(QtWidgets.QWidget):
         """
             this one if you finish the login and authenticate it will show the frame
         """
-
         self.Frame.show()
+
+    def update_time(self):
+        # Get current date and time
+        now = datetime.now()
+        # Format the date and time as "day | month | day_number | year hour:minute am/pm"
+        dt_string = now.strftime("%A | %B | %d | %y %I:%M %p")
+        # Update the label text
+        self.date_label.setText(dt_string)
+
+    def label_username(self):
+        '''Label username from the database'''
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'database.db')
+        
+        with sqlite3.connect(file_path) as conn:
+            self.cursor = conn.cursor()
+            query = 'SELECT username FROM users WHERE username = ?'
+            self.cursor.execute(query, (self.username,))
+            result = self.cursor.fetchone()
+            if result:
+                username = result[0]
+                self.username_label.setText(f'Hi {username}')
+
+    def check_credentials_manager(self):
+        '''Check the credentials of the user'''
+        self.manger = self.username_input_2.text()
+        password = self.password_input_2.text()
+
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'database.db')
+    
+        with sqlite3.connect(file_path) as conn:
+            self.cursor = conn.cursor()
+
+            query = 'SELECT * FROM users WHERE username = ? AND password = ?'
+
+            self.cursor.execute(query, (self.username, password))
+            result = self.cursor.fetchone()
+
+            if result:
+                self.stackedWidget.setCurrentWidget(self.page_2)
+            else:
+                self.username_input.text()
+                self.password_input.text()
+                # Pop up invalid credentials
+                self.invalid_label_2_manger.setText('Invalid Credentials')
+                QTimer.singleShot(3000, lambda: self.invalid_label_2_manger.setText(''))
+
+    def clear_credentials_manager(self):
+        '''clear the input method'''
+        self.username_input_2.clear()
+        self.username_input_2.clear()
+        self.username_input_2.setFocus()
+
+
+    def search_data_manger(self):
+        """
+        Search the data in the second tab. 
+        You can choose to search by name or ID.
+        """
+        search_name_manger = self.name_search_manger_input.text()
+        search_id_manger = self.id_search_manager_input.text()
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(current_directory, 'members.db')
+        conn = sqlite3.connect(file_path)
+        cursor = conn.cursor()
+
+        query = "SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members WHERE 1=1"
+        params = []
+
+        if search_name_manger:
+            query += " AND Name LIKE ?"
+            params.append(f"%{search_name_manger}%")
+
+        if search_id_manger:
+            query += " AND Id = ?"
+            params.append(search_id_manger)
+
+        try:
+            cursor.execute(query, params)
+            rows = cursor.fetchall()
+
+            self.model_4.removeRows(0, self.model_4.rowCount())  # Clear the model
+
+            for row_data in rows:
+                items = [QStandardItem(str(data)) for data in row_data]
+                self.model_4.appendRow(items)
+
+            print('Search Results Fetched Successfully')
+        except sqlite3.Error as e:
+            print(f'Sqlite error: {e}')
+        finally:
+            conn.close()
+
+ 
+   
 
 
 if __name__ == "__main__":
@@ -372,7 +552,7 @@ if __name__ == "__main__":
 
     login_dialog = LoginDialog()
     if login_dialog.exec() == QDialog.DialogCode.Accepted:
-        main_app = MyApp()
+        main_app = MyApp(username=login_dialog.username)  # Pass the username
         main_app.show()
         main_app.show_frame()  # Show the frame only after successful authentication
 
