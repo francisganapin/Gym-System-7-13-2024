@@ -10,4 +10,7 @@ Before we could started the app and anyone want to use and modify :)
 
    ![image](https://github.com/user-attachments/assets/23230469-481c-4856-b2e5-ad927ff154a9)
 
-   both username and password was admin base on database you could edit that 
+   both username and password was admin base on database you could edit that
+   
+   ![image](https://github.com/user-attachments/assets/c2ed9d91-826e-4575-955f-84d23f81fa97)
+   This was the Register page 
