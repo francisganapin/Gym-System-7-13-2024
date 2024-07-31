@@ -7,6 +7,8 @@ Intro:
 
 Before we could started the app and anyone want to use and modify :)
 This was the version 1.1 since some of design was not align 
+Dont worry all of the data here are fake.
+
 
 I would find fix and optimize some code starting 8/2/2024
 
