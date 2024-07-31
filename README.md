@@ -1,7 +1,14 @@
+Intro:
+      Some small  Gym business here in the Philippines  They record their Trassaction on Notebook.
+      Thats why I created this Software for those who want thier record specially on members to be precise and easy to find.
+      We all know that if if you write on notebook you by your self will encounter some difficulties finding and wondering.
+      Not knowingly your customer are already due date to thier montly subcriptions
+
+
 Before we could started the app and anyone want to use and modify :)
 This was the version 1.1 since some of design was not align 
 
-1) this app is compatible for python12.4
+1) this app is compatible for python 12.4
 2) pip install virtualenv
 3) python -m venv gym_venv
 4) get the path of  gym_venv/Scripts/activate 
