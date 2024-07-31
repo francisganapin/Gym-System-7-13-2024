@@ -8,6 +8,8 @@ Intro:
 Before we could started the app and anyone want to use and modify :)
 This was the version 1.1 since some of design was not align 
 
+I would find fix and optimize some code starting 8/2/2024
+
 1) this app is compatible for python 12.4
 2) pip install virtualenv
 3) python -m venv gym_venv
