@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import sqlite3
 import csv
-from PyQt6.QtCore import QTimer,Qt
+from PyQt6.QtCore import QTimer
 from PyQt6 import QtCore
 
 #################################third party import
@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
 from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
-from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QDialog
 from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget
 #################################
 
@@ -70,7 +70,8 @@ class CustomConfirmDialog(QDialog):
         self.setFixedSize(self.size())
         # Update the label to include ID and name
 
-        self.label_for_delete.setText(f'Are you sure you want to delete the member with ID: {member_id} and Name: {member_name}?')
+        self.label_for_delete.setText(f'Are you sure you want to delete this member : {member_id}')
+        self.label_for_delete_2.setText(f'with member name of? {member_name}')
         # Connect buttons to dialog slots
         self.yes_button_2.clicked.connect(self.accept)
         self.no_button.clicked.connect(self.reject)
@@ -95,15 +96,15 @@ class MyApp(QtWidgets.QWidget):
         # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
         self.model_1 = QStandardItemModel()
-        self.model_1.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.model_1.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
         self.tableView.setModel(self.model_1)
 
         self.model_2 = QStandardItemModel()
-        self.model_2.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.model_2.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
         self.tableView_2.setModel(self.model_2)
         
         self.model_4 = QStandardItemModel()
-        self.model_4.setHorizontalHeaderLabels(["Id","Name", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.model_4.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender","Birthday", "Address"])
         self.tableView_4.setModel(self.model_4)
 
         # Load the data when the application starts
@@ -158,37 +159,25 @@ class MyApp(QtWidgets.QWidget):
         '''
         this one is use for register data of the member
         '''
-        ###############################################################
-        #self.id_input.setObjectName("id_input") line 55
+     
         id_value    = self.id_input.text()
-        ###############################################################
-        #self.name_input.setObjectName("name_input") line 46
+
         name =  self.name_input.text()
-        ###############################################################
-        #self.email_input.setObjectName("email_input") lien 24
+   
         email = self.email_input.text()
-        ###############################################################
-        #self.birthday_widget.setObjectName("birthday_widget") line 67
+
         expiry_date = self.expiry_input.selectedDate().toString("yyyy-MM-dd") 
-        ###############################################################
-        #self.birthday_widget.setObjectName("birthday_widget") 64
+  
         birthday =  self.expiry_input.selectedDate().toString("yyyy-MM-dd") 
-        ###############################################################
-        #self.gender_input.setObjectName("gender_input") line 30
-        #self.member_input.addItem("")
-        #self.member_input.addItem("")
-        #it was qcombox use current text
+   
         gender = self.gender_input.currentText()
-        ################################################################
-        #self.member_input.setObjectName("member_input") 35
+     
         member = self.member_input.currentText()
-        ################################################################
-        #.toPlainText() use to plain text if we using textEdit
+
         address = self.address_input.toPlainText()
-        ###############################################################
-        #self.contact_input.setObjectName("contact_input")65
+  
         contact   = self.contact_input.text()
-        ###############################################################
+    
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory,'members.db')
         conn = sqlite3.connect(file_path)
@@ -198,7 +187,7 @@ class MyApp(QtWidgets.QWidget):
             cursor.execute('''INSERT INTO members
                         (Id,Name,Email,Expiry_date,Contact,Gender,Birthday,Address)
                         VALUES(?,?,?,?,?,?,?,?)''', 
-                        (id_value,name,email,expiry_date, contact,gender,birthday,address))
+                        (id_value,name,email,expiry_date,member,contact,gender,birthday,address))
             
             conn.commit()
             print('Data Inserted Successfully')
@@ -214,7 +203,7 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
             rows = cursor.fetchall()
 
             self.model_1.removeRows(0, self.model_1.rowCount())  # Clear the model
@@ -236,7 +225,7 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
             rows = cursor.fetchall()
 
             self.model_2.removeRows(0, self.model_2.rowCount())  # Clear the model
@@ -258,7 +247,7 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
             rows = cursor.fetchall()
 
             self.model_4.removeRows(0, self.model_4.rowCount())  # Clear the model
@@ -285,7 +274,7 @@ class MyApp(QtWidgets.QWidget):
         conn = sqlite3.connect(file_path)
         cursor = conn.cursor()
 
-        query = "SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members WHERE 1=1"
+        query = "SELECT Id, Name, Email, Membership,Expiry_date, Contact, Gender, Birthday, Address FROM members WHERE 1=1"
         params = []
 
         if search_name:
@@ -326,14 +315,14 @@ class MyApp(QtWidgets.QWidget):
         if selected_row < 0:
             QMessageBox.warning(self, "Selection Error", "No row is selected.")
             return
-        item_id = self.model.item(selected_row, 0).text()
+        item_id = self.model_2.item(selected_row, 0).text()
         # Check if item_id is valid (not empty)
         if not item_id:
             QMessageBox.warning(self, "Selection Error", "No item is selected.")
             return
         new_expiry = self.Expiry_edit.selectedDate().toString("yyyy-MM-dd")
         # Update the model in the table view
-        self.model.setItem(selected_row,3,QStandardItem(new_expiry))  # Assuming column 3 is Expiry
+        self.model_2.setItem(selected_row,3,QStandardItem(new_expiry))  # Assuming column 3 is Expiry
         # Update the database
         current_directory = os.path.dirname(os.path.abspath(__file__))
         db_path = os.path.join(current_directory, 'members.db')
@@ -531,7 +520,7 @@ class MyApp(QtWidgets.QWidget):
         conn = sqlite3.connect(file_path)
         cursor = conn.cursor()
 
-        query = "SELECT Id, Name, Email, Expiry_date, Contact, Gender, Birthday, Address FROM members WHERE 1=1"
+        query = "SELECT Id, Name, Email, Membership,Expiry_date, Contact, Gender, Birthday, Address FROM members WHERE 1=1"
         params = []
 
         if search_name_manger:
