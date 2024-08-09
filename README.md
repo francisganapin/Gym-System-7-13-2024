@@ -1,4 +1,4 @@
-Intro:
+![image](https://github.com/user-attachments/assets/f9124b17-bed1-45a8-8a70-02e3128766ab)Intro:
       Some small  Gym business here in the Philippines  They record their Trassaction on Notebook.
       Thats why I created this Software for those who want thier record specially on members to be precise and easy to find.
       We all know that if if you write on notebook you by your self will encounter some difficulties finding and wondering.
@@ -44,6 +44,7 @@ I would find fix and optimize some code starting 8/2/2024
    you could click some one them if you want delete before that you can delete them there is pop up if you want to delete them
    permanently i make this one so that to avoid mistake of employee who would delete a member
 
-   
+   ![image](https://github.com/user-attachments/assets/4d08aec8-cb87-46a6-a0d7-0322c717fd5e)
+   hello i already fix some sql input and have hoaver effects to every button we have <3
 
    
