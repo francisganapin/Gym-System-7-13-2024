@@ -45,6 +45,7 @@ I would find fix and optimize some code starting 8/2/2024
    permanently i make this one so that to avoid mistake of employee who would delete a member
 
    ![image](https://github.com/user-attachments/assets/4d08aec8-cb87-46a6-a0d7-0322c717fd5e)
+   
    hello i already fix some sql input and have hoaver effects to every button we have <3
 
    
