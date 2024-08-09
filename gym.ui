@@ -51,7 +51,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -319,8 +319,16 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#eeeedd
-</string>
+       <string notr="true">QPushButton {
+	background-color:#eeeedd;
+    border-radius: 20px;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 12pt;
+    color: black;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}</string>
       </property>
       <property name="text">
        <string>Register</string>
@@ -503,7 +511,15 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#eeeedd</string>
+       <string notr="true">QPushButton {
+	background-color:#eeeedd;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 12pt;
+    color: black;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}</string>
       </property>
       <property name="text">
        <string>Search</string>
@@ -548,7 +564,15 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#eeeedd</string>
+       <string notr="true">QPushButton {
+	background-color:#eeeedd;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 12pt;
+    color: black;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}</string>
       </property>
       <property name="text">
        <string>Save</string>
@@ -617,7 +641,15 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#eeeedd</string>
+       <string notr="true">QPushButton {
+	background-color:#eeeedd;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 12pt;
+    color: black;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}</string>
       </property>
       <property name="text">
        <string>Login</string>
@@ -746,12 +778,20 @@
          <rect>
           <x>20</x>
           <y>360</y>
-          <width>75</width>
-          <height>24</height>
+          <width>91</width>
+          <height>31</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:#ffffff;</string>
+         <string notr="true">QPushButton {
+	background-color:#eeeedd;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 12pt;
+    color: black;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}</string>
         </property>
         <property name="text">
          <string>Login</string>

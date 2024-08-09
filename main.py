@@ -185,8 +185,8 @@ class MyApp(QtWidgets.QWidget):
 
         try:
             cursor.execute('''INSERT INTO members
-                        (Id,Name,Email,Expiry_date,Contact,Gender,Birthday,Address)
-                        VALUES(?,?,?,?,?,?,?,?)''', 
+                        (Id,Name,Membership,Email,Expiry_date,Contact,Gender,Birthday,Address)
+                        VALUES(?,?,?,?,?,?,?,?,?)''', 
                         (id_value,name,email,expiry_date,member,contact,gender,birthday,address))
             
             conn.commit()
