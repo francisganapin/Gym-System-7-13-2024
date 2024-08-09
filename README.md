@@ -1,4 +1,6 @@
-![image](https://github.com/user-attachments/assets/f9124b17-bed1-45a8-8a70-02e3128766ab)Intro:
+![image](https://github.com/user-attachments/assets/f9124b17-bed1-45a8-8a70-02e3128766ab)
+
+Intro:
       Some small  Gym business here in the Philippines  They record their Trassaction on Notebook.
       Thats why I created this Software for those who want thier record specially on members to be precise and easy to find.
       We all know that if if you write on notebook you by your self will encounter some difficulties finding and wondering.
