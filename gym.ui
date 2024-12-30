@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Love Creatine Gym</string>
   </property>
   <widget class="QWidget" name="Aunthentication" native="true">
    <property name="geometry">
@@ -51,7 +51,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -586,8 +586,8 @@ QPushButton:hover {
      <widget class="QLabel" name="name_label">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>150</y>
+        <x>340</x>
+        <y>350</y>
         <width>401</width>
         <height>40</height>
        </rect>
@@ -602,8 +602,8 @@ QPushButton:hover {
      <widget class="QLabel" name="expiry_label">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>220</y>
+        <x>340</x>
+        <y>430</y>
         <width>261</width>
         <height>40</height>
        </rect>
@@ -618,8 +618,8 @@ QPushButton:hover {
      <widget class="QLineEdit" name="id_entry">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>280</y>
+        <x>380</x>
+        <y>510</y>
         <width>261</width>
         <height>40</height>
        </rect>
@@ -634,8 +634,8 @@ QPushButton:hover {
      <widget class="QPushButton" name="Login_bt">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>340</y>
+        <x>380</x>
+        <y>570</y>
         <width>261</width>
         <height>40</height>
        </rect>
@@ -658,8 +658,8 @@ QPushButton:hover {
      <widget class="QLabel" name="label_15">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>80</y>
+        <x>430</x>
+        <y>40</y>
         <width>281</width>
         <height>40</height>
        </rect>
@@ -669,6 +669,22 @@ QPushButton:hover {
       </property>
       <property name="text">
        <string>Members Login</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="image_label">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>100</y>
+        <width>451</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 900 italic 18pt &quot;Segoe UI&quot;;</string>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>
@@ -974,9 +990,9 @@ font: 20pt &quot;Segoe UI&quot;;</string>
    <widget class="QLabel" name="date_label">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>410</x>
       <y>730</y>
-      <width>551</width>
+      <width>631</width>
       <height>41</height>
      </rect>
     </property>

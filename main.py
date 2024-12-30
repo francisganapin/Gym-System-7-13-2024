@@ -5,7 +5,7 @@ import sqlite3
 import csv
 from PyQt6.QtCore import QTimer
 from PyQt6 import QtCore
-
+from PyQt6.QtGui import QPixmap 
 #################################third party import
 from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
 from PyQt6 import QtWidgets,uic
@@ -96,15 +96,15 @@ class MyApp(QtWidgets.QWidget):
         # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
         self.model_1 = QStandardItemModel()
-        self.model_1.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.model_1.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address","Image"])
         self.tableView.setModel(self.model_1)
 
         self.model_2 = QStandardItemModel()
-        self.model_2.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address"])
+        self.model_2.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address","Image"])
         self.tableView_2.setModel(self.model_2)
         
         self.model_4 = QStandardItemModel()
-        self.model_4.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender","Birthday", "Address"])
+        self.model_4.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender","Birthday", "Address","Image"])
         self.tableView_4.setModel(self.model_4)
 
         # Load the data when the application starts
@@ -203,7 +203,7 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address,Image FROM members")
             rows = cursor.fetchall()
 
             self.model_1.removeRows(0, self.model_1.rowCount())  # Clear the model
@@ -225,7 +225,7 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address,Image FROM members")
             rows = cursor.fetchall()
 
             self.model_2.removeRows(0, self.model_2.rowCount())  # Clear the model
@@ -247,7 +247,7 @@ class MyApp(QtWidgets.QWidget):
         cursor = conn.cursor()
 
         try:
-            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address FROM members")
+            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address, Image FROM members")
             rows = cursor.fetchall()
 
             self.model_4.removeRows(0, self.model_4.rowCount())  # Clear the model
@@ -352,7 +352,7 @@ class MyApp(QtWidgets.QWidget):
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
         cursor = conn.cursor()
-        cursor.execute('SELECT Name, Expiry_date FROM members WHERE Id = ?', (member_id,))
+        cursor.execute('SELECT Name, Expiry_date,Image FROM members WHERE Id = ?', (member_id,))
         member = cursor.fetchone()
         conn.close()
         return member
@@ -363,13 +363,22 @@ class MyApp(QtWidgets.QWidget):
         member_id = self.id_entry.text()
     
         member = self.fetch_data_member(member_id)
+        
         if member:
             self.name_label.setText(f"Name: {member[0]}")
         
             expiry_date_str = member[1]
+
+            image_member = member[2]
+
             expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d").date()
             current_date = datetime.now().date()
+            
+            pixmap = QPixmap(image_member)
+            self.image_label.setPixmap(pixmap)
+            
             self.expiry_label.setText(f"Expiry: {expiry_date_str}")
+            print(image_member)
             if expiry_date < current_date:
 
                 self.expiry_label.setStyleSheet("color: red; font: 900 italic 18pt")
@@ -378,8 +387,9 @@ class MyApp(QtWidgets.QWidget):
           
             
             self.save_login_record(member[0])
-            QTimer.singleShot(3000, lambda: self.name_label.setText(""))
-            QTimer.singleShot(3000, lambda: self.expiry_label.setText(""))
+            QTimer.singleShot(3000, lambda: self.image_label.clear())
+            QTimer.singleShot(3000, lambda: self.name_label.clear())
+            QTimer.singleShot(3000, lambda: self.expiry_label.clear())
         else:
             QMessageBox.information(self, "Not Found", "Member not found.")
 
@@ -455,11 +465,11 @@ class MyApp(QtWidgets.QWidget):
         self.Frame.show()
 
     def update_time(self):
-        # Get current date and time
+
         now = datetime.now()
-        # Format the date and time as "day | month | day_number | year hour:minute am/pm"
+   
         dt_string = now.strftime("%A | %B | %d | %y %I:%M %p")
-        # Update the label text
+
         self.date_label.setText(dt_string)
 
     def label_username(self):
