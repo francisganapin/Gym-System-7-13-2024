@@ -376,6 +376,10 @@ class MyApp(QtWidgets.QWidget):
             
             pixmap = QPixmap(image_member)
             self.image_label.setPixmap(pixmap)
+
+            if not os.path.exists(image_member):
+                self.image_label.setText('image does not exist')
+                
             
             self.expiry_label.setText(f"Expiry: {expiry_date_str}")
             print(image_member)
