@@ -200,7 +200,7 @@ class MyApp(QtWidgets.QWidget):
             self.save_path = save_path
             print(f"Image saved to: {save_path}")
 
-    def insert_data(self,save_path):
+    def insert_data(self):
         '''
         this one is use for register data of the member
         '''
