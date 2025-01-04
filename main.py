@@ -12,8 +12,10 @@ from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtWidgets import QDialog
-from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget
+from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget,QFileDialog
 #################################
+from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QPushButton
+import shutil
 
 class LoginDialog(QDialog):
     '''Display data and this was the framework of our app before they can login'''
@@ -120,6 +122,7 @@ class MyApp(QtWidgets.QWidget):
         self.search_bt_manager.clicked.connect(self.search_data_manger)
         self.delete_bt_manager_2.clicked.connect(self.delete_selected_row)
         self.back_bt_manager.clicked.connect(self.back_manager_page)
+        self.upload_button_2.clicked.connect(self.upload_image)
         
         self.tableView_3_model = QStandardItemModel()
         self.tableView_3.setModel(self.tableView_3_model)
@@ -147,15 +150,57 @@ class MyApp(QtWidgets.QWidget):
 
         ##### this would we should add this so our  display fucntion would work
        
+       
 
        # Access the stacked widget and the pages
         self.stackedWidget = self.findChild(QStackedWidget, 'stackedWidget')
         self.page_1 = self.findChild(QWidget, 'page_1')
         self.page_2 = self.findChild(QWidget, 'page_2')
         self.password_input_2.setEchoMode(QLineEdit.EchoMode.Password)
-    
 
-    def insert_data(self):
+        # We use this folder to save the image we upload 
+        self.save_folder ='Image'
+        os.makedirs(self.save_folder,exist_ok=True)
+
+        # Access widgets by their names in the .ui file
+        self.image_label_2 = self.findChild(QLabel, "image_label_2")
+        self.upload_button_2 = self.findChild(QPushButton, "upload_button_2")
+
+        # Debug: Check if widgets are loaded correctly
+        if self.image_label_2 is None:
+            raise ValueError("Widget 'image_label_2' not found. Check the .ui file.")
+        if self.upload_button_2 is None:
+            raise ValueError("Widget 'upload_button' not found. Check the .ui file.")
+
+
+    def upload_image(self):
+        """Open a file dialog to select an image and display it in QLabel (image_label_2)."""
+        # Create a QFileDialog instance
+        file_dialog = QFileDialog(self)  
+        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)  # Allow only existing files
+        file_dialog.setNameFilter("Images (*.png *.jpg *.jpeg *.bmp *.gif)")  # Filter to show image files
+        
+        if file_dialog.exec():  # Open the dialog and wait for user interaction
+            file_path_image = file_dialog.selectedFiles()[0]  # Get the selected file path
+            
+            # Display the selected image in the QLabel (image_label_2)
+            pixmap = QPixmap(file_path_image).scaled(
+                self.image_label_2.width(), self.image_label_2.height()
+            )
+            self.image_label_2.setPixmap(pixmap)
+
+            # Optionally store the path for further actions
+            self.selected_image_path = file_path_image
+            
+
+            # Save the image to the designated folder
+            save_path = os.path.join(self.save_folder, os.path.basename(self.selected_image_path))
+            shutil.copy(self.selected_image_path, save_path)
+
+            self.save_path = save_path
+            print(f"Image saved to: {save_path}")
+
+    def insert_data(self,save_path):
         '''
         this one is use for register data of the member
         '''
@@ -177,7 +222,16 @@ class MyApp(QtWidgets.QWidget):
         address = self.address_input.toPlainText()
   
         contact   = self.contact_input.text()
+
+        path_image_data = self.save_path
     
+
+
+
+
+
+
+
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory,'members.db')
         conn = sqlite3.connect(file_path)
@@ -185,9 +239,9 @@ class MyApp(QtWidgets.QWidget):
 
         try:
             cursor.execute('''INSERT INTO members
-                        (Id,Name,Membership,Email,Expiry_date,Contact,Gender,Birthday,Address)
-                        VALUES(?,?,?,?,?,?,?,?,?)''', 
-                        (id_value,name,email,expiry_date,member,contact,gender,birthday,address))
+                        (Id,Name,Membership,Email,Expiry_date,Contact,Gender,Birthday,Address,Image)
+                        VALUES(?,?,?,?,?,?,?,?,?,?)''', 
+                        (id_value,name,member,email,expiry_date,contact,gender,birthday,address,path_image_data))
             
             conn.commit()
             print('Data Inserted Successfully')

@@ -1,3 +1,7 @@
+1-5-2025 
+	updated registration form we can save image on registration
+
+
 12-30-2024
 	update login it show member face now
 

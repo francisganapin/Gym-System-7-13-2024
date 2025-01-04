@@ -412,10 +412,10 @@ QPushButton:hover {
      <widget class="QLabel" name="image_label_2">
       <property name="geometry">
        <rect>
-        <x>540</x>
-        <y>40</y>
-        <width>471</width>
-        <height>121</height>
+        <x>650</x>
+        <y>20</y>
+        <width>391</width>
+        <height>151</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -423,6 +423,31 @@ QPushButton:hover {
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="upload_button_2">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>70</y>
+        <width>121</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color:#eeeedd;
+    border-radius: 20px;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 12pt;
+    color: black;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}</string>
+      </property>
+      <property name="text">
+       <string>Upload</string>
       </property>
      </widget>
     </widget>
