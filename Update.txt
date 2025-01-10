@@ -1,3 +1,6 @@
+1-10-2025 
+	Remove duplicate function 
+
 1-5-2025 
 	updated registration form we can save image on registration
 

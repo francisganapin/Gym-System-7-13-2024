@@ -42,7 +42,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:#CAEFD1</string>
+     <string notr="true">background-color:#A7D9C2</string>
     </property>
     <property name="tabPosition">
      <enum>QTabWidget::North</enum>
@@ -51,7 +51,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -160,7 +160,7 @@
        <string notr="true">font: 900 italic 12pt &quot;Segoe UI&quot;;</string>
       </property>
       <property name="text">
-       <string>Id</string>
+       <string>ID</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_8">
@@ -261,7 +261,7 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#555555</string>
+       <string notr="true">background-color:#D1CAEF</string>
       </property>
      </widget>
      <widget class="QCalendarWidget" name="expiry_input">
@@ -274,7 +274,7 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#555555</string>
+       <string notr="true">background-color:#D1CAEF</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_9">
@@ -344,7 +344,7 @@ QPushButton:hover {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#555555</string>
+       <string notr="true">background-color:#D1CAEF</string>
       </property>
      </widget>
      <widget class="QTextEdit" name="address_input">
@@ -465,7 +465,7 @@ QPushButton:hover {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#555555</string>
+       <string notr="true">background-color:#D1CAEF</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_10">
@@ -592,7 +592,7 @@ QPushButton:hover {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#555555</string>
+       <string notr="true">background-color:#D1CAEF</string>
       </property>
      </widget>
      <widget class="QPushButton" name="Save_Date_Bt">
@@ -736,20 +736,20 @@ QPushButton:hover {
      <widget class="QTableView" name="tableView_3">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>60</y>
-        <width>261</width>
+        <x>30</x>
+        <y>70</y>
+        <width>381</width>
         <height>561</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:#555555;</string>
+       <string notr="true">background-color:#D1CAEF</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_14">
       <property name="geometry">
        <rect>
-        <x>40</x>
+        <x>170</x>
         <y>20</y>
         <width>201</width>
         <height>21</height>
@@ -765,9 +765,9 @@ QPushButton:hover {
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>60</y>
-        <width>371</width>
+        <x>580</x>
+        <y>70</y>
+        <width>461</width>
         <height>561</height>
        </rect>
       </property>
@@ -899,7 +899,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:#555555;</string>
+         <string notr="true">background-color:#D1CAEF</string>
         </property>
        </widget>
        <widget class="QLineEdit" name="name_search_manger_input">
@@ -1013,7 +1013,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
      <widget class="QLabel" name="label_16">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>720</x>
         <y>20</y>
         <width>201</width>
         <height>21</height>

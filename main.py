@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget,QFileDialog
 #################################
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QPushButton
 import shutil
+from PyQt6.QtCore import QDate
 
 class LoginDialog(QDialog):
     '''Display data and this was the framework of our app before they can login'''
@@ -110,9 +111,8 @@ class MyApp(QtWidgets.QWidget):
         self.tableView_4.setModel(self.model_4)
 
         # Load the data when the application starts
-        self.show_database_register()
-        self.show_database_edit()
-        self.show_database_manger()
+        self.show_database()
+        self.delete_database_manager()
 
         self.SearchButton.clicked.connect(self.search_data)
         self.register_button.clicked.connect(self.insert_data)
@@ -125,7 +125,6 @@ class MyApp(QtWidgets.QWidget):
         self.upload_button_2.clicked.connect(self.upload_image)
         
         self.tableView_3_model = QStandardItemModel()
-        self.tableView_3.setModel(self.tableView_3_model)
 
 
         ###############################################################
@@ -137,7 +136,7 @@ class MyApp(QtWidgets.QWidget):
         
         ########################## display all login record in page  Login Data Page
         self.display_login_records()
-
+        self.delete_database_manager()
         # show date  and time 
 
         self.timer = QtCore.QTimer(self)
@@ -226,12 +225,6 @@ class MyApp(QtWidgets.QWidget):
         path_image_data = self.save_path
     
 
-
-
-
-
-
-
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory,'members.db')
         conn = sqlite3.connect(file_path)
@@ -245,12 +238,24 @@ class MyApp(QtWidgets.QWidget):
             
             conn.commit()
             print('Data Inserted Successfully')
+            self.contact_input.clear()
+            self.id_input.clear()
+            self.name_input.clear()
+            self.email_input.clear()
+            self.expiry_input.setSelectedDate(QDate.currentDate())
+            self.expiry_input.setSelectedDate(QDate.currentDate())
+            self.gender_input.currentText()
+            self.member_input.currentText()
+            self.address_input.clear()
+            self.contact_input.clear()
+            self.image_label_2.clear()
+        
         except sqlite3.IntegrityError:
            QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id_value} is already exists.")
         finally:
             conn.close()
 
-    def show_database_register(self):
+    def show_database(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
@@ -266,24 +271,6 @@ class MyApp(QtWidgets.QWidget):
                 items = [QStandardItem(str(data)) for data in row_data]
                 self.model_1.appendRow(items)
 
-            print('Data Fetched Successfully')
-        except sqlite3.Error as e:
-            print(f'Sqlite error: {e}')
-        finally:
-            conn.close()
-
-    def show_database_edit(self):
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory, 'members.db')
-        conn = sqlite3.connect(file_path)
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address,Image FROM members")
-            rows = cursor.fetchall()
-
-            self.model_2.removeRows(0, self.model_2.rowCount())  # Clear the model
-
             for row_data in rows:
                 items = [QStandardItem(str(data)) for data in row_data]
                 self.model_2.appendRow(items)
@@ -294,7 +281,9 @@ class MyApp(QtWidgets.QWidget):
         finally:
             conn.close()
 
-    def show_database_manger(self):
+ 
+
+    def delete_database_manager(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory, 'members.db')
         conn = sqlite3.connect(file_path)
@@ -437,6 +426,8 @@ class MyApp(QtWidgets.QWidget):
             
             self.expiry_label.setText(f"Expiry: {expiry_date_str}")
             print(image_member)
+
+            
             if expiry_date < current_date:
 
                 self.expiry_label.setStyleSheet("color: red; font: 900 italic 18pt")
