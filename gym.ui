@@ -251,7 +251,7 @@
        <string notr="true">background-color:#eeeedd</string>
       </property>
      </widget>
-     <widget class="QCalendarWidget" name="birthday_widget">
+     <widget class="QCalendarWidget" name="birthday_input">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -894,7 +894,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
          <rect>
           <x>20</x>
           <y>20</y>
-          <width>331</width>
+          <width>421</width>
           <height>221</height>
          </rect>
         </property>
@@ -920,7 +920,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
          <rect>
           <x>20</x>
           <y>330</y>
-          <width>331</width>
+          <width>421</width>
           <height>41</height>
          </rect>
         </property>
@@ -981,7 +981,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
          <rect>
           <x>20</x>
           <y>380</y>
-          <width>331</width>
+          <width>421</width>
           <height>41</height>
          </rect>
         </property>
@@ -997,7 +997,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
          <rect>
           <x>20</x>
           <y>430</y>
-          <width>331</width>
+          <width>421</width>
           <height>41</height>
          </rect>
         </property>

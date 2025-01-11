@@ -171,7 +171,16 @@ class MyApp(QtWidgets.QWidget):
         if self.upload_button_2 is None:
             raise ValueError("Widget 'upload_button' not found. Check the .ui file.")
 
-
+        #set max lenght for selected input
+        if self.id_input:
+            self.id_input.setMaxLength(10)
+        if self.contact_input:
+            self.contact_input.setMaxLength(11)
+        if self.id_search_input:
+            self.id_search_input.setMaxLength(10)
+        if self.id_entry:
+            self.id_entry.setMaxLength(10)
+        
     def upload_image(self):
         """Open a file dialog to select an image and display it in QLabel (image_label_2)."""
         # Create a QFileDialog instance
@@ -205,26 +214,25 @@ class MyApp(QtWidgets.QWidget):
         '''
      
         id_value    = self.id_input.text()
-
         name =  self.name_input.text()
-   
         email = self.email_input.text()
-
         expiry_date = self.expiry_input.selectedDate().toString("yyyy-MM-dd") 
-  
-        birthday =  self.expiry_input.selectedDate().toString("yyyy-MM-dd") 
-   
+        birthday =  self.birthday_input.selectedDate().toString("yyyy-MM-dd") 
         gender = self.gender_input.currentText()
-     
         member = self.member_input.currentText()
-
         address = self.address_input.toPlainText()
-  
         contact   = self.contact_input.text()
-
         path_image_data = self.save_path
-    
 
+
+        if not hasattr(self,'save_path') or not self.save_path:
+            print('missing image value')
+            return
+
+        if not all([id_value,name,email,expiry_date,birthday,member,address,contact,self.save_path]):
+            print('there are missing value')
+            return
+        
         current_directory = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_directory,'members.db')
         conn = sqlite3.connect(file_path)
@@ -235,25 +243,30 @@ class MyApp(QtWidgets.QWidget):
                         (Id,Name,Membership,Email,Expiry_date,Contact,Gender,Birthday,Address,Image)
                         VALUES(?,?,?,?,?,?,?,?,?,?)''', 
                         (id_value,name,member,email,expiry_date,contact,gender,birthday,address,path_image_data))
-            
-            conn.commit()
+
             print('Data Inserted Successfully')
-            self.contact_input.clear()
-            self.id_input.clear()
-            self.name_input.clear()
-            self.email_input.clear()
-            self.expiry_input.setSelectedDate(QDate.currentDate())
-            self.expiry_input.setSelectedDate(QDate.currentDate())
-            self.gender_input.currentText()
-            self.member_input.currentText()
-            self.address_input.clear()
-            self.contact_input.clear()
-            self.image_label_2.clear()
-        
+            self.clear_data_input()
+            conn.commit()
+           
         except sqlite3.IntegrityError:
            QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id_value} is already exists.")
         finally:
             conn.close()
+
+    def clear_data_input(self):
+        """this will clear the data input text"""
+
+        self.contact_input.clear()
+        self.id_input.clear()
+        self.name_input.clear()
+        self.email_input.clear()
+        self.expiry_input.setSelectedDate(QDate.currentDate())
+        self.birthday_input.setSelectedDate(QDate.currentDate())
+        self.gender_input.currentText()
+        self.member_input.currentText()
+        self.address_input.clear()
+        self.contact_input.clear()
+        self.image_label_2.clear()
 
     def show_database(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -645,6 +658,8 @@ class MyApp(QtWidgets.QWidget):
 
     def back_manager_page(self):
         self.stackedWidget.setCurrentWidget(self.page_1)
+
+    
 
 
 if __name__ == "__main__":

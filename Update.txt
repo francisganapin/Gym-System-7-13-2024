@@ -1,8 +1,13 @@
+1-11-2025
+	fix input for id and contact limit by 10 and 11
+
 1-10-2025 
 	Remove duplicate function 
+	fix registration
 
 1-5-2025 
 	updated registration form we can save image on registration
+	updated interface now
 
 
 12-30-2024

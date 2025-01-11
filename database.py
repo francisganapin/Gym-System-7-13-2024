@@ -1,7 +1,7 @@
 import sqlite3
 
 try:
-    # Connect to SQLite database (or create it if it doesn't exist)
+    #CREATE DATABASE IF DOESNT EXIST 
     conn = sqlite3.connect('members.db')
     cursor = conn.cursor()
 
