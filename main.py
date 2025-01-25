@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
 from PyQt6 import QtWidgets,uic
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import QMessageBox
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog,QVBoxLayout
 from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget,QFileDialog
 #################################
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QPushButton
@@ -65,6 +65,8 @@ class LoginDialog(QDialog):
         self.username_input.setFocus()
 
 class CustomConfirmDialog(QDialog):
+    '''WE USE THIS IF Confirmation for delete member admin
+    '''
     def __init__(self, member_id, member_name, parent=None):
         super().__init__(parent)
         uic.loadUi('delete.ui', self)
@@ -83,6 +85,31 @@ class CustomConfirmDialog(QDialog):
         return self.exec()
 
 
+
+class MissingValueDialog(QDialog):
+    def __init__(self, message, parent=None):
+        super().__init__(parent)
+
+        
+        self. setWindowTitle('Missing Values')
+        self.setFixedSize(300,150)
+        layout = QVBoxLayout()
+
+        self.message_label = QLabel(message)
+        layout.addWidget(self.message_label)
+
+
+        self.ok_button = QPushButton('ok')
+        self.ok_button.clicked.connect(self.accept)
+        layout.addWidget(self.ok_button)
+
+        self.setLayout(layout)
+
+
+    def exec_dialog(self):
+        return self.exec()
+
+
 class MyApp(QtWidgets.QWidget):
     ''' display oru data so that it would work
     '''
@@ -95,6 +122,10 @@ class MyApp(QtWidgets.QWidget):
 
         # Store the username
         self.username = username
+
+
+        # initialize save path
+        self.save_path = None
 
         # Apply the dark theme
         # Assuming you have a QTableView in your UI file named 'tableView'
@@ -226,11 +257,13 @@ class MyApp(QtWidgets.QWidget):
 
 
         if not hasattr(self,'save_path') or not self.save_path:
-            print('missing image value')
+            dialog = MissingValueDialog('missing image value')
+            dialog.exec_dialog()
             return
 
         if not all([id_value,name,email,expiry_date,birthday,member,address,contact,self.save_path]):
-            print('there are missing value')
+            dialog = MissingValueDialog('there are missing value')
+            dialog.exec_dialog()
             return
         
         current_directory = os.path.dirname(os.path.abspath(__file__))
