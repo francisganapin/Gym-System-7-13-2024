@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 import sqlite3
 import csv
+from PIL import Image
 from PyQt6.QtCore import QTimer
 from PyQt6 import QtCore
 from PyQt6.QtGui import QPixmap 
@@ -32,7 +33,6 @@ class LoginDialog(QDialog):
         self.login_button.clicked.connect(self.check_credentials)
 
 
-
     def check_credentials(self):
         '''Check the credentials of the user'''
         self.username = self.username_input.text()
@@ -58,11 +58,26 @@ class LoginDialog(QDialog):
                 self.invalid_label.setText('Invalid Credentials')
                 QTimer.singleShot(3000, lambda: self.invalid_label.setText(''))
 
+    
+    def exec_dialog(self):
+        """Executes the dialog and returns the result."""
+
+        result = self.exec()
+        if result == QDialog.Rejected:
+            sys.exit()
+
+
+
     def clear_credentials(self):
         '''clear the input method'''
         self.username_input.clear()
         self.password_input.clear()
         self.username_input.setFocus()
+
+
+    def closeEvent(self,event):
+        event.accept()
+        sys.exit()
 
 class CustomConfirmDialog(QDialog):
     '''WE USE THIS IF Confirmation for delete member admin
@@ -91,20 +106,13 @@ class MissingValueDialog(QDialog):
         super().__init__(parent)
 
         
-        self. setWindowTitle('Missing Values')
-        self.setFixedSize(300,150)
-        layout = QVBoxLayout()
+        uic.loadUi('missing_value.ui', self)
+        self.setWindowTitle('Missing Value')
+        # Set fixed size to prevent resizing
+        self.setFixedSize(self.size())
+        # Update the label to include ID and name
 
-        self.message_label = QLabel(message)
-        layout.addWidget(self.message_label)
-
-
-        self.ok_button = QPushButton('ok')
-        self.ok_button.clicked.connect(self.accept)
-        layout.addWidget(self.ok_button)
-
-        self.setLayout(layout)
-
+        self.label_for_delete.setText(message)
 
     def exec_dialog(self):
         return self.exec()
@@ -214,6 +222,8 @@ class MyApp(QtWidgets.QWidget):
         
     def upload_image(self):
         """Open a file dialog to select an image and display it in QLabel (image_label_2)."""
+         # initialize save path
+        self.save_path = None
         # Create a QFileDialog instance
         file_dialog = QFileDialog(self)  
         file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)  # Allow only existing files
@@ -227,6 +237,7 @@ class MyApp(QtWidgets.QWidget):
                 self.image_label_2.width(), self.image_label_2.height()
             )
             self.image_label_2.setPixmap(pixmap)
+            
 
             # Optionally store the path for further actions
             self.selected_image_path = file_path_image
@@ -234,10 +245,18 @@ class MyApp(QtWidgets.QWidget):
 
             # Save the image to the designated folder
             save_path = os.path.join(self.save_folder, os.path.basename(self.selected_image_path))
-            shutil.copy(self.selected_image_path, save_path)
+
+            #save the image
+            with Image.open(file_path_image) as img:
+                img = img.convert('RGB')
+                resize_img = img.resize((451,241))
+                resize_img.save(save_path)
+
 
             self.save_path = save_path
             print(f"Image saved to: {save_path}")
+
+            # we need convert image to 516 * 516  3/18/2025
 
     def insert_data(self):
         '''
@@ -255,14 +274,32 @@ class MyApp(QtWidgets.QWidget):
         contact   = self.contact_input.text()
         path_image_data = self.save_path
 
+        # we need to fix this mix value show what the value missing here
+        list_values ={
+            'ID Card':id_value,
+            'Name':name,
+            'Email':email,
+            'Expiry':expiry_date,
+            'Birthday':birthday,
+            'Member':member,
+            'Address':address,
+            'Contact':contact,
+            'Profile':self.save_path
+        }  
+        
+        # Check all values before filtering
+        print(f"Debug: All values -> {list_values}")
 
-        if not hasattr(self,'save_path') or not self.save_path:
-            dialog = MissingValueDialog('missing image value')
-            dialog.exec_dialog()
-            return
+                # Collect missing fields where values are empty
+        missing_values = [key for key, val in list_values.items() if not val or str(val).strip() == ""]
 
-        if not all([id_value,name,email,expiry_date,birthday,member,address,contact,self.save_path]):
-            dialog = MissingValueDialog('there are missing value')
+                # Debugging print
+        print(f"Debug: Missing values list -> {missing_values}")
+
+        if missing_values:
+            value = ', '.join(missing_values)  # Properly format with commas
+            print(f'There are missing values: {value}')  # Debugging output
+            dialog = MissingValueDialog(f'There are missing values: {value}')
             dialog.exec_dialog()
             return
         

@@ -1,6 +1,10 @@
+3-18-2025
+	fix ui login make uniform image
+
 1-26-2025 
 	updated image bug if there is no image
 	updated there is dialog if there is missing value	
+	updated login bug it wont exit if we choose x button
 
 1-11-2025
 	fix input for id and contact limit by 10 and 11
