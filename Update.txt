@@ -1,3 +1,6 @@
+3-19-2025 
+	refactor some function for better scalability
+
 3-18-2025
 	fix ui login make uniform image
 

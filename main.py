@@ -15,108 +15,13 @@ from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtWidgets import QDialog,QVBoxLayout
 from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget,QFileDialog
 #################################
-from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QPushButton
-import shutil
+from PyQt6.QtWidgets import QApplication, QFileDialog, QLabel, QPushButton
 from PyQt6.QtCore import QDate
+# our module
+from module.confirm_dialog import CustomConfirmDialog
+from module.login import LoginDialog
 
-class LoginDialog(QDialog):
-    '''Display data and this was the framework of our app before they can login'''
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('login.ui', self)
-
-        # Set fixed size to prevent resizing
-        self.setFixedSize(self.size())
-        self.username_input.text()
-        self.password_input.text()
-        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self.login_button.clicked.connect(self.check_credentials)
-
-
-    def check_credentials(self):
-        '''Check the credentials of the user'''
-        self.username = self.username_input.text()
-        password = self.password_input.text()
-
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory, 'database.db')
-    
-        with sqlite3.connect(file_path) as conn:
-            self.cursor = conn.cursor()
-
-            query = 'SELECT * FROM users WHERE username = ? AND password = ?'
-
-            self.cursor.execute(query, (self.username, password))
-            result = self.cursor.fetchone()
-
-            if result:
-                self.accept()
-            else:
-                self.username_input.text()
-                self.password_input.text()
-                # Pop up invalid credentials
-                self.invalid_label.setText('Invalid Credentials')
-                QTimer.singleShot(3000, lambda: self.invalid_label.setText(''))
-
-    
-    def exec_dialog(self):
-        """Executes the dialog and returns the result."""
-
-        result = self.exec()
-        if result == QDialog.Rejected:
-            sys.exit()
-
-
-
-    def clear_credentials(self):
-        '''clear the input method'''
-        self.username_input.clear()
-        self.password_input.clear()
-        self.username_input.setFocus()
-
-
-    def closeEvent(self,event):
-        event.accept()
-        sys.exit()
-
-class CustomConfirmDialog(QDialog):
-    '''WE USE THIS IF Confirmation for delete member admin
-    '''
-    def __init__(self, member_id, member_name, parent=None):
-        super().__init__(parent)
-        uic.loadUi('delete.ui', self)
-
-        # Set fixed size to prevent resizing
-        self.setFixedSize(self.size())
-        # Update the label to include ID and name
-
-        self.label_for_delete.setText(f'Are you sure you want to delete this member : {member_id}')
-        self.label_for_delete_2.setText(f'with member name of? {member_name}')
-        # Connect buttons to dialog slots
-        self.yes_button_2.clicked.connect(self.accept)
-        self.no_button.clicked.connect(self.reject)
-
-    def exec_dialog(self):
-        return self.exec()
-
-
-
-class MissingValueDialog(QDialog):
-    def __init__(self, message, parent=None):
-        super().__init__(parent)
-
-        
-        uic.loadUi('missing_value.ui', self)
-        self.setWindowTitle('Missing Value')
-        # Set fixed size to prevent resizing
-        self.setFixedSize(self.size())
-        # Update the label to include ID and name
-
-        self.label_for_delete.setText(message)
-
-    def exec_dialog(self):
-        return self.exec()
-
+from module.insert_data import InsertValue
 
 class MyApp(QtWidgets.QWidget):
     ''' display oru data so that it would work
@@ -153,15 +58,20 @@ class MyApp(QtWidgets.QWidget):
         self.show_database()
         self.delete_database_manager()
 
+        #module
+        self.wew = InsertValue(self)  
+        self.register_button.clicked.connect(self.wew.insert_data)
+        self.upload_button_2.clicked.connect(self.wew.upload_image)
+
         self.SearchButton.clicked.connect(self.search_data)
-        self.register_button.clicked.connect(self.insert_data)
+      
         self.Save_Date_Bt.clicked.connect(self.edit_item)
         self.Login_bt.clicked.connect(self.display_member_data)
         self.login_button_2.clicked.connect(self.check_credentials_manager)
         self.search_bt_manager.clicked.connect(self.search_data_manger)
         self.delete_bt_manager_2.clicked.connect(self.delete_selected_row)
         self.back_bt_manager.clicked.connect(self.back_manager_page)
-        self.upload_button_2.clicked.connect(self.upload_image)
+       
         
         self.tableView_3_model = QStandardItemModel()
 
@@ -210,7 +120,7 @@ class MyApp(QtWidgets.QWidget):
         if self.upload_button_2 is None:
             raise ValueError("Widget 'upload_button' not found. Check the .ui file.")
 
-        #set max lenght for selected input
+                     #set max lenght for selected input
         if self.id_input:
             self.id_input.setMaxLength(10)
         if self.contact_input:
@@ -219,124 +129,12 @@ class MyApp(QtWidgets.QWidget):
             self.id_search_input.setMaxLength(10)
         if self.id_entry:
             self.id_entry.setMaxLength(10)
+ 
         
-    def upload_image(self):
-        """Open a file dialog to select an image and display it in QLabel (image_label_2)."""
-         # initialize save path
-        self.save_path = None
-        # Create a QFileDialog instance
-        file_dialog = QFileDialog(self)  
-        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)  # Allow only existing files
-        file_dialog.setNameFilter("Images (*.png *.jpg *.jpeg *.bmp *.gif)")  # Filter to show image files
-        
-        if file_dialog.exec():  # Open the dialog and wait for user interaction
-            file_path_image = file_dialog.selectedFiles()[0]  # Get the selected file path
-            
-            # Display the selected image in the QLabel (image_label_2)
-            pixmap = QPixmap(file_path_image).scaled(
-                self.image_label_2.width(), self.image_label_2.height()
-            )
-            self.image_label_2.setPixmap(pixmap)
-            
+    
 
-            # Optionally store the path for further actions
-            self.selected_image_path = file_path_image
-            
+   
 
-            # Save the image to the designated folder
-            save_path = os.path.join(self.save_folder, os.path.basename(self.selected_image_path))
-
-            #save the image
-            with Image.open(file_path_image) as img:
-                img = img.convert('RGB')
-                resize_img = img.resize((451,241))
-                resize_img.save(save_path)
-
-
-            self.save_path = save_path
-            print(f"Image saved to: {save_path}")
-
-            # we need convert image to 516 * 516  3/18/2025
-
-    def insert_data(self):
-        '''
-        this one is use for register data of the member
-        '''
-     
-        id_value    = self.id_input.text()
-        name =  self.name_input.text()
-        email = self.email_input.text()
-        expiry_date = self.expiry_input.selectedDate().toString("yyyy-MM-dd") 
-        birthday =  self.birthday_input.selectedDate().toString("yyyy-MM-dd") 
-        gender = self.gender_input.currentText()
-        member = self.member_input.currentText()
-        address = self.address_input.toPlainText()
-        contact   = self.contact_input.text()
-        path_image_data = self.save_path
-
-        # we need to fix this mix value show what the value missing here
-        list_values ={
-            'ID Card':id_value,
-            'Name':name,
-            'Email':email,
-            'Expiry':expiry_date,
-            'Birthday':birthday,
-            'Member':member,
-            'Address':address,
-            'Contact':contact,
-            'Profile':self.save_path
-        }  
-        
-        # Check all values before filtering
-        print(f"Debug: All values -> {list_values}")
-
-                # Collect missing fields where values are empty
-        missing_values = [key for key, val in list_values.items() if not val or str(val).strip() == ""]
-
-                # Debugging print
-        print(f"Debug: Missing values list -> {missing_values}")
-
-        if missing_values:
-            value = ', '.join(missing_values)  # Properly format with commas
-            print(f'There are missing values: {value}')  # Debugging output
-            dialog = MissingValueDialog(f'There are missing values: {value}')
-            dialog.exec_dialog()
-            return
-        
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory,'members.db')
-        conn = sqlite3.connect(file_path)
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute('''INSERT INTO members
-                        (Id,Name,Membership,Email,Expiry_date,Contact,Gender,Birthday,Address,Image)
-                        VALUES(?,?,?,?,?,?,?,?,?,?)''', 
-                        (id_value,name,member,email,expiry_date,contact,gender,birthday,address,path_image_data))
-
-            print('Data Inserted Successfully')
-            self.clear_data_input()
-            conn.commit()
-           
-        except sqlite3.IntegrityError:
-           QMessageBox.warning(self, "Duplicate Id", f"An entry with ID {id_value} is already exists.")
-        finally:
-            conn.close()
-
-    def clear_data_input(self):
-        """this will clear the data input text"""
-
-        self.contact_input.clear()
-        self.id_input.clear()
-        self.name_input.clear()
-        self.email_input.clear()
-        self.expiry_input.setSelectedDate(QDate.currentDate())
-        self.birthday_input.setSelectedDate(QDate.currentDate())
-        self.gender_input.currentText()
-        self.member_input.currentText()
-        self.address_input.clear()
-        self.contact_input.clear()
-        self.image_label_2.clear()
 
     def show_database(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
