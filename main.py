@@ -18,9 +18,10 @@ from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget,QFileDialog
 from PyQt6.QtWidgets import QApplication, QFileDialog, QLabel, QPushButton
 from PyQt6.QtCore import QDate
 # our module
+from module.dis_member_login import LoginMemberDisplay
 from module.confirm_dialog import CustomConfirmDialog
 from module.login import LoginDialog
-
+from module.show_database import ShowDatabaseDisplay
 from module.insert_data import InsertValue
 
 class MyApp(QtWidgets.QWidget):
@@ -41,10 +42,7 @@ class MyApp(QtWidgets.QWidget):
         self.save_path = None
 
         # Apply the dark theme
-        # Assuming you have a QTableView in your UI file named 'tableView'
-        self.model_1 = QStandardItemModel()
-        self.model_1.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address","Image"])
-        self.tableView.setModel(self.model_1)
+
 
         self.model_2 = QStandardItemModel()
         self.model_2.setHorizontalHeaderLabels(["Id","Name",'Membership',"Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address","Image"])
@@ -55,18 +53,47 @@ class MyApp(QtWidgets.QWidget):
         self.tableView_4.setModel(self.model_4)
 
         # Load the data when the application starts
-        self.show_database()
+        
         self.delete_database_manager()
 
         #module
+       
+
+        self.m1 = LoginMemberDisplay(self)
+        self.Login_bt.clicked.connect(self.m1.display_member_data)
+
         self.wew = InsertValue(self)  
         self.register_button.clicked.connect(self.wew.insert_data)
         self.upload_button_2.clicked.connect(self.wew.upload_image)
 
-        self.SearchButton.clicked.connect(self.search_data)
+        self.m3 = ShowDatabaseDisplay(self)
+        self.model_1 = QStandardItemModel()
+        self.model_1.setHorizontalHeaderLabels(["Id", "Name", "Membership", "Email", "Expiry_date", "Contact", "Gender", "Birthday", "Address", "Image"])
+
+  
+        if self.m3.ui.tableView:
+            self.m3.ui.tableView.setModel(self.model_1)
+
+        self.SearchButton.clicked.connect(self.m3.search_data)
+        self.Save_Date_Bt.clicked.connect(self.m3.edit_item)
+       
+        self.m3.show_database()
+
+
+
+
+
+
+
+
+
+
+
+
+  
       
-        self.Save_Date_Bt.clicked.connect(self.edit_item)
-        self.Login_bt.clicked.connect(self.display_member_data)
+        self.Save_Date_Bt.clicked.connect(self.m3.edit_item)
+        
         self.login_button_2.clicked.connect(self.check_credentials_manager)
         self.search_bt_manager.clicked.connect(self.search_data_manger)
         self.delete_bt_manager_2.clicked.connect(self.delete_selected_row)
@@ -131,38 +158,7 @@ class MyApp(QtWidgets.QWidget):
             self.id_entry.setMaxLength(10)
  
         
-    
 
-   
-
-
-    def show_database(self):
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory, 'members.db')
-        conn = sqlite3.connect(file_path)
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute("SELECT Id, Name, Membership,Email, Expiry_date, Contact, Gender, Birthday, Address,Image FROM members")
-            rows = cursor.fetchall()
-
-            self.model_1.removeRows(0, self.model_1.rowCount())  # Clear the model
-
-            for row_data in rows:
-                items = [QStandardItem(str(data)) for data in row_data]
-                self.model_1.appendRow(items)
-
-            for row_data in rows:
-                items = [QStandardItem(str(data)) for data in row_data]
-                self.model_2.appendRow(items)
-
-            print('Data Fetched Successfully')
-        except sqlite3.Error as e:
-            print(f'Sqlite error: {e}')
-        finally:
-            conn.close()
-
- 
 
     def delete_database_manager(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -186,44 +182,7 @@ class MyApp(QtWidgets.QWidget):
         finally:
             conn.close()
 
-    def search_data(self):
-        """
-        Search the data in the second tab. 
-        You can choose to search by name or ID.
-        """
-        search_name = self.name_search_input.text()
-        search_id = self.id_search_input.text()
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory, 'members.db')
-        conn = sqlite3.connect(file_path)
-        cursor = conn.cursor()
-
-        query = "SELECT Id, Name, Email, Membership,Expiry_date, Contact, Gender, Birthday, Address FROM members WHERE 1=1"
-        params = []
-
-        if search_name:
-            query += " AND Name LIKE ?"
-            params.append(f"%{search_name}%")
-
-        if search_id:
-            query += " AND Id = ?"
-            params.append(search_id)
-
-        try:
-            cursor.execute(query, params)
-            rows = cursor.fetchall()
-
-            self.model_2.removeRows(0, self.model_2.rowCount())  # Clear the model
-
-            for row_data in rows:
-                items = [QStandardItem(str(data)) for data in row_data]
-                self.model_2.appendRow(items)
-
-            print('Search Results Fetched Successfully')
-        except sqlite3.Error as e:
-            print(f'Sqlite error: {e}')
-        finally:
-            conn.close()
+    
 
     def edit_item(self):
         '''this one is edit for data on selected member 
@@ -267,19 +226,7 @@ class MyApp(QtWidgets.QWidget):
             conn.close()
         #main.py:215:0: C0301: Line too long (101/100) (line-too-long)
 
-    def fetch_data_member(self, member_id):
-        """
-        this one is for function for display_member_data()
-        since this one it will use for fetching member in login
-        """
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory, 'members.db')
-        conn = sqlite3.connect(file_path)
-        cursor = conn.cursor()
-        cursor.execute('SELECT Name, Expiry_date,Image FROM members WHERE Id = ?', (member_id,))
-        member = cursor.fetchone()
-        conn.close()
-        return member
+
 
     def display_member_data(self):
         """display them if they are in login so that the 
