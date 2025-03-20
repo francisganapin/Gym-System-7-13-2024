@@ -14,6 +14,8 @@ class CustomConfirmDialog(QDialog):
         super().__init__(parent)
         uic.loadUi('delete.ui', self)
 
+    
+
         # Set fixed size to prevent resizing
         self.setFixedSize(self.size())
         # Update the label to include ID and name

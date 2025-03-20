@@ -3,25 +3,16 @@ from datetime import datetime
 import os
 import sqlite3
 import csv
-from PIL import Image
+
 from PyQt6.QtCore import QTimer
-from PyQt6 import QtCore
+
 from PyQt6.QtGui import QPixmap 
 #################################third party import
-from PyQt6.QtWidgets import QApplication, QDialog, QLineEdit
-from PyQt6 import QtWidgets,uic
-from PyQt6.QtGui import QStandardItemModel, QStandardItem
-from PyQt6.QtWidgets import QMessageBox
-from PyQt6.QtWidgets import QDialog,QVBoxLayout
-from PyQt6.QtWidgets import QApplication,QStackedWidget, QWidget,QFileDialog
-#################################
-from PyQt6.QtWidgets import QApplication, QFileDialog, QLabel, QPushButton
-from PyQt6.QtCore import QDate
-# our module
-from module.confirm_dialog import CustomConfirmDialog
-from module.login import LoginDialog
 
-from module.insert_data import InsertValue
+from PyQt6.QtWidgets import QMessageBox
+
+#################################
+
 
 class LoginMemberDisplay:
     def __init__(self, ui):
@@ -90,7 +81,7 @@ class LoginMemberDisplay:
         """
         try:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            record = [member_name, current_time,self.username]
+            record = [member_name, current_time,self.ui.username]
 
             current_directory = os.path.dirname(os.path.abspath(__file__))
             file_path = os.path.join(current_directory, 'login_records.csv')
