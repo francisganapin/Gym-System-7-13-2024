@@ -9,7 +9,6 @@ QDialog, QLineEdit
 
 )
 
-
 from module.confirm_dialog import CustomConfirmDialog
 
 class ManagerModule:

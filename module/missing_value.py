@@ -2,15 +2,20 @@
 from PyQt6.QtWidgets import  QDialog
 from PyQt6 import uic
 from PyQt6.QtWidgets import QDialog
-
+import os
 #################################
 
 class MissingValueDialog(QDialog):
     def __init__(self, message, parent=None):
         super().__init__(parent)
 
+             
+        #connect to other folder in other folder 
+        ui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'ui', 'missing_value.ui')
         
-        uic.loadUi('missing_value.ui', self)
+        # Load the UI file
+        uic.loadUi(ui_path, self)
+    
         self.setWindowTitle('Missing Value')
         # Set fixed size to prevent resizing
         self.setFixedSize(self.size())

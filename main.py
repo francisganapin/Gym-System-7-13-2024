@@ -29,7 +29,7 @@ class MyApp(QtWidgets.QWidget):
     '''
     def __init__(self,username=None):
         super().__init__()
-        uic.loadUi('gym.ui', self)
+        uic.loadUi('ui/gym.ui', self)
        
         # Set fixed size to prevent resizing
         self.setFixedSize(self.size())
@@ -223,10 +223,6 @@ class MyApp(QtWidgets.QWidget):
             if result:
                 username = result[0]
                 self.username_label.setText(f'Hi {username}')
-
-    
-    
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -2,7 +2,7 @@
 from PyQt6.QtWidgets import  QDialog
 from PyQt6 import uic
 from PyQt6.QtWidgets import QDialog
-
+import os
 #################################
 
 
@@ -12,9 +12,15 @@ class CustomConfirmDialog(QDialog):
     '''
     def __init__(self, member_id, member_name, parent=None):
         super().__init__(parent)
-        uic.loadUi('delete.ui', self)
 
-    
+
+            
+        #connect to other folder in other folder 
+        ui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'ui', 'delete.ui')
+        
+        # Load the UI file
+        uic.loadUi(ui_path, self)
+
 
         # Set fixed size to prevent resizing
         self.setFixedSize(self.size())

@@ -17,7 +17,12 @@ class LoginDialog(QDialog):
     '''Display data and this was the framework of our app before they can login'''
     def __init__(self):
         super().__init__()
-        uic.loadUi('login.ui', self)
+        
+        #connect to other folder in other folder 
+        ui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'ui', 'login.ui')
+        
+        # Load the UI file
+        uic.loadUi(ui_path, self)
 
         # Set fixed size to prevent resizing
         self.setFixedSize(self.size())
