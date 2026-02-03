@@ -36,3 +36,156 @@
 	Add new table for image of member
 
 d
+asdsadsadsadsadsadsadsa3-22-2025
+	update ui and folder for scalability
+
+3-20-2025
+	fix some module to or main for better scalability
+3-19-2025 
+	refactor some function for better scalability
+
+3-18-2025
+	fix ui login make uniform image
+
+1-26-2025 
+	updated image bug if there is no image
+	updated there is dialog if there is missing value	
+	updated login bug it wont exit if we choose x button
+
+1-11-2025
+	fix input for id and contact limit by 10 and 11
+
+1-10-2025 
+	Remove duplicate function 
+	fix registration
+
+1-5-2025 
+	updated registration form we can save image on registration
+	updated interface now
+
+
+12-30-2024
+	update login it show member face now
+
+
+12-25-2024 
+	Update new form named as Love Creatine Gym
+	Login form
+	Add new table for image of member
+
+d
+asdsadsadsadsadsadsadsa3-22-2025
+	update ui and folder for scalability
+
+3-20-2025
+	fix some module to or main for better scalability
+3-19-2025 
+	refactor some function for better scalability
+
+3-18-2025
+	fix ui login make uniform image
+
+1-26-2025 
+	updated image bug if there is no image
+	updated there is dialog if there is missing value	
+	updated login bug it wont exit if we choose x button
+
+1-11-2025
+	fix input for id and contact limit by 10 and 11
+
+1-10-2025 
+	Remove duplicate function 
+	fix registration
+
+1-5-2025 
+	updated registration form we can save image on registration
+	updated interface now
+
+
+12-30-2024
+	update login it show member face now
+
+
+12-25-2024 
+	Update new form named as Love Creatine Gym
+	Login form
+	Add new table for image of member
+
+d
+asdsadsadsadsadsadsadsa3-22-2025
+	update ui and folder for scalability
+
+3-20-2025
+	fix some module to or main for better scalability
+3-19-2025 
+	refactor some function for better scalability
+
+3-18-2025
+	fix ui login make uniform image
+
+1-26-2025 
+	updated image bug if there is no image
+	updated there is dialog if there is missing value	
+	updated login bug it wont exit if we choose x button
+
+1-11-2025
+	fix input for id and contact limit by 10 and 11
+
+1-10-2025 
+	Remove duplicate function 
+	fix registration
+
+1-5-2025 
+	updated registration form we can save image on registration
+	updated interface now
+
+
+12-30-2024
+	update login it show member face now
+
+
+12-25-2024 
+	Update new form named as Love Creatine Gym
+	Login form
+	Add new table for image of member
+
+d
+asdsadsadsadsadsadsadsa3-22-2025
+	update ui and folder for scalability
+
+3-20-2025
+	fix some module to or main for better scalability
+3-19-2025 
+	refactor some function for better scalability
+
+3-18-2025
+	fix ui login make uniform image
+
+1-26-2025 
+	updated image bug if there is no image
+	updated there is dialog if there is missing value	
+	updated login bug it wont exit if we choose x button
+
+1-11-2025
+	fix input for id and contact limit by 10 and 11
+
+1-10-2025 
+	Remove duplicate function 
+	fix registration
+
+1-5-2025 
+	updated registration form we can save image on registration
+	updated interface now
+
+
+12-30-2024
+	update login it show member face now
+
+
+12-25-2024 
+	Update new form named as Love Creatine Gym
+	Login form
+	Add new table for image of member
+
+d
+asdsadsadsadsadsadsadsa
